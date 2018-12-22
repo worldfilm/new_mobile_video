@@ -1,124 +1,84 @@
 <template>
   <div class="Navheader">
-    <div class="tabHeader shadow">
-      <a href="javascript:;"  >
-      
-      </a>
-    </div>
+    <ul>
+      <li v-for='(item,index) in list' :id='item.id' :style="{width: widthData}" @click='getlist(item.id,index)'  :class="{active:index == num}">
+        <span  v-text='item.name'></span>
+      </li>
+    </ul>
   </div>
 </template>
-
 <script>
+import Hub from '@/components/Hub.vue'
 export default {
-  data () {
+  data() {
     return {
-      selected: null,
-      subSelect: 'new',
-      dropDown: false,
-      dropUp: false,
-      show: true
+      list: null,
+      widthData:null,
+      num:0,
+      id:2,
     }
   },
-  watch: {
-  },
   methods: {
-    tabClick (id) {
+    // 发送列表id
+    getlist(id,idx){
+      this.num=idx
+      this.id=id
+      Hub.$emit('Navheader', this.id)
+    },
+    tabClick(id) {
       if (this.selected === id) return
       this.subSelect = 'new'
       this.selected = id
       // this.$emit('clickHandle', id, this.subSelect)
     },
+    // 获取导航列表
+    getCategory() {
+      this.$http.get('/mapi/category/getvediolist').then(res => {
+        if (res.status === 0) {
+          this.list = res.data
+          this.widthData=100/this.list.length+'%'
+        }
+      })
+    },
   },
-  mounted () {
+  mounted() {
+    this.getCategory()
+  },
+  created() {
+    // console.log(this.tlist)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.shadow {
-  box-shadow: 0px 2px 8px #fe7a94;
-}
-.tabHeader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  display: -webkit-flex;
-  width: 100%;
-  height: 0.8rem;
-  background: #fff;
-  z-index: 100;
-  transition: all .3s;
-  a {
-    flex-grow: 1;
-    font-size: 0.25rem;
-    line-height: 0.8rem;
-    text-align: center;
-    font-weight: 600;
-    &.active {
-      color: #fe7a94;
-    }
-  }
-}
-.content-header {
-    top: 1rem;
-    left: 50%;
-    transform: translate(-50%);
-    width: 70%;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 25px;
-    a {
-      width: 50%;
-      border-radius: 0 25px 25px 0;
-      border: 2px solid #fe7a94;
-      margin-right: -1px;
-      &:first-child {
-        border-radius: 25px 0 0 25px;
-        margin-left: -1px;
-      }
-      &.active {
-        color: #fff;
-        background: #fe7a94;
-      }
-    }
-  }
-.tabContainer {
-  position: absolute;
-  top: 0.8rem;
-  left: 0;
-  width: 100%;
-  height: calc(100% - 1rem);
-  padding: 0rem;
-  overflow: hidden;
-}
-._tabContainer {
-  top: 1.7rem;
-  height: calc(100% - 2rem);
-}
-.wrapper {
-  padding-bottom: 0.8rem;
-  position: relative;
-  .loading {
-    position: absolute;
-    bottom: 0;
+.Navheader {
+    position: fixed;
+    top: 0;
     left: 0;
+    display: flex;
+    display: -webkit-flex;
     width: 100%;
     height: 0.8rem;
-    line-height: 0.8rem;
-    text-align: center;
-    .el-icon-loading {
-      font-size: 0.6rem;
+    background: #fff;
+    z-index: 100;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px #fe7a94;
+    ul {
+        width: 100%;
+        li {
+            display: inline-block;
+            text-align: center;
+            width:20%;
+            span {
+                font-size: 0.25rem;
+                line-height: 0.8rem;
+                display: block;
+                font-weight: 600;
+            }
+        }
+        .active {
+            color: #fe7a94;
+        }
     }
-  }
-}
-.transition {
-  height: 0 !important;
-  opacity: 0;
-  transition: all .3s;
-}
-._height {
-  top: 0.8rem;
-  height: calc(100% - 1.2rem);
 }
 </style>

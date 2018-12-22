@@ -16,7 +16,6 @@
         <slot></slot>
         <div class="loading" v-if="dropUp"><span class="el-icon-loading"></span></div>
       </div>
-
     </div>
   </div>
 </template>
