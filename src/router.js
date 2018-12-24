@@ -1,16 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/page/home.vue'
 import AV from '@/page/AV.vue'
-import Videos from '@/page/Videos/index.vue'
-import Tag from '@/page/Tag/index.vue'
+import Video from '@/page/Video.vue'
+import Tag from '@/page/Tag.vue'
 import Collect from '@/page/Collect/index.vue'
 import User from '@/page/user/index.vue'
 import Login from '@/page/user/login.vue'
 import register from '@/page/user/register.vue'
 import myVideos from '@/page/user/myVideos.vue'
 import Results from '@/page/common/videosResult.vue'
-import ActorDetail from '@/page/Tag/actorDetail.vue'
+// import ActorDetail from '@/page/Tag/actorDetail.vue'
 import Profile from '@/page/user/myProfile.vue'
 import Edit from '@/page/user/editProfile.vue'
 import UserSafe from '@/page/user/userSafe.vue'
@@ -26,59 +25,96 @@ const router = new Router({
   linkActiveClass: 'active',
   routes: [{
       path: '/',
-      name: 'Home',
-      component: Home,
-      children: [{
-          path: '',
-          redirect: {
-            name: 'av'
-          }
+      name: 'AV',
+      meta: {
+        title: 'AV'
+      },
+      component: AV
+    },{
+      path: '/AV',
+      name: 'AV',
+      meta: {
+        title: 'AV'
+      },
+      component: AV
+    },{
+      path: '/Video',
+      name: 'Video',
+      meta: {
+        title: 'Video'
+      },
+      component: Video
+    },{
+        path: '/Tag',
+        name: 'Tag',
+        meta: {
+          title: 'Tag'
         },
-        {
-          path: '/av',
-          name: 'av',
-          meta: {
-            keepAlive: true
-          },
-          component: AV
-        },
-        {
-          path: '/videos',
-          name: 'Videos',
-          meta: {
-            keepAlive: true
-          },
-          component: Videos
-        },
-        {
-          path: '/tag',
-          name: 'Tag',
-          meta: {
-            keepAlive: true
-          },
-          component: Tag
-        },
-        {
-          path: '/collect',
+        component: Tag
+      },{
+          path: '/Collect',
           name: 'Collect',
-          component: Collect,
           meta: {
-            requiresAuth: true,
-            keepAlive: true
-          }
-        },
-        {
-          path: '/user',
-          name: 'user',
-          component: User
-        },
-        {
-          path: '/results',
-          name: 'results',
-          component: Results
-        }
-      ]
-    },
+            title: 'Collect'
+          },
+          component: Collect
+        },{
+            path: '/User',
+            name: 'User',
+            meta: {
+              title: 'User'
+            },
+            component: User
+          },
+    // {
+    //   path: '/',
+    //   name: 'AV',
+    //   component: AV,
+    //   children: [{
+    //       path: '/AV',
+    //       name: 'AV',
+    //       meta: {
+    //         keepAlive: true
+    //       },
+    //       component: AV
+    //     },
+    //     {
+    //       path: '/Video',
+    //       name: 'Video',
+    //       meta: {
+    //         keepAlive: true
+    //       },
+    //       component: Video
+    //     },
+    //     {
+    //       path: '/tag',
+    //       name: 'Tag',
+    //       meta: {
+    //         keepAlive: true
+    //       },
+    //       component: Tag
+    //     },
+    //     {
+    //       path: '/collect',
+    //       name: 'Collect',
+    //       component: Collect,
+    //       meta: {
+    //         requiresAuth: true,
+    //         keepAlive: true
+    //       }
+    //     },
+    //     {
+    //       path: '/user',
+    //       name: 'user',
+    //       component: User
+    //     },
+    //     {
+    //       path: '/results',
+    //       name: 'results',
+    //       component: Results
+    //     }
+    //   ]
+    // },
     {
       path: '/login',
       name: 'Login',
@@ -103,14 +139,14 @@ const router = new Router({
       },
       component: Forgetpsw
     },
-    {
-      path: '/actorDetail',
-      name: 'actorDetail',
-      meta: {
-        title: '女优详情'
-      },
-      component: ActorDetail
-    },
+    // {
+    //   path: '/actorDetail',
+    //   name: 'actorDetail',
+    //   meta: {
+    //     title: '女优详情'
+    //   },
+    //   component: ActorDetail
+    // },
     {
       path: '/myVideos',
       meta: {

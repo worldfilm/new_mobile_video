@@ -1,11 +1,12 @@
 <template>
   <div class="Navheader">
     <ul>
-      <li v-for='(item,index) in list' :id='item.id' :style="{width: widthData}" @click='getlist(item.id,index)'  :class="{active:index == num}">
+      <li v-for='(item,index) in titlelist' :id='item.id' :style="{width: widthData}" @click='getlist(item.id,index)'  :class="{active:index == num}">
         <span  v-text='item.name'></span>
       </li>
     </ul>
   </div>
+
 </template>
 <script>
 import Hub from '@/components/Hub.vue'
@@ -16,6 +17,7 @@ export default {
       widthData:null,
       num:0,
       id:2,
+      titlelist:[],
     }
   },
   methods: {
@@ -32,21 +34,31 @@ export default {
       // this.$emit('clickHandle', id, this.subSelect)
     },
     // 获取导航列表
-    getCategory() {
-      this.$http.get('/mapi/category/getvediolist').then(res => {
-        if (res.status === 0) {
-          this.list = res.data
-          this.widthData=100/this.list.length+'%'
-        }
-      })
+    // getCategory() {
+    //   this.$http.get('/mapi/category/getvediolist').then(res => {
+    //     if (res.status === 0) {
+    //       this.list = res.data
+    //       this.widthData=100/this.list.length+'%'
+    //     }
+    //   })
+    // },
+    getList(){
+        Hub.$on('titlelist',data=>{
+          this.titlelist=data
+          this.widthData=100/data.length+'%'
+        })
     },
   },
-  mounted() {
-    this.getCategory()
-  },
+  // updated() {
+  //   Hub.$on('titlelist',data=>{
+  //     this.titlelist=data
+  //     console.log(this.titlelist)
+  //   //
+  //   })
+  // },
   created() {
-    // console.log(this.tlist)
-  }
+     this.getList()
+ }
 }
 </script>
 

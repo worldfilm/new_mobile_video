@@ -1,38 +1,32 @@
 <template>
-  <div class="videos">
-    <v-tab :tabs="tabs" @clickHandle="clickHandle" @refresh="param.page++">
-      <div style="height: 100%" class="clearfix" v-loading="loading">
-        <videos :video-item="item" v-for="(item, index) in showRes" :key="item.id + index" />
+  <div class="Video">
+    <Navheader/>
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <Tab/>
+          <VideoList/>
+        </div>
       </div>
-    </v-tab>
+    </div>
+    <Footer/>
   </div>
 </template>
-
 <script>
+import Hub from '@/components/Hub.vue'
 import vTab from '@/components/tabs.vue'
-import videos from '@/components/videos.vue'
-const tabs = [
-  {
-    label: '最新更新',
-    id: 'new'
-  },
-  {
-    label: '最热视频',
-    id: 'hot'
-  },
-  {
-    label: '自拍偷拍',
-    id: '7,9,24'
-  }
-]
+import VideoList from '@/components/VideoList.vue'
+import Navheader from '@/components/Navheader.vue'
+import Footer from '@/components/Footer.vue'
+import Tab from '@/components/new/Tab.vue'
+
 export default {
   components: {
-    vTab,
-    videos
+    Navheader,
+    Tab,Footer,VideoList
   },
   data () {
     return {
-      tabs,
       videos: {
         new: [],
         hot: []
@@ -44,7 +38,8 @@ export default {
         page: 1,
         page_size: 10
       },
-      loading: false
+      loading: false,
+      titlelist:[{name: '最新更新',id: 7},{name: '最热视频',id: 9},{name: '自拍偷拍',id: 24}],
     }
   },
   watch: {
@@ -63,7 +58,7 @@ export default {
       } else if (str === '7,9,24'){
         this.getVideosByCategory(str)
       }
-    },  
+    },
     // 获取视频列表
     getVideosByCategory (id = '') {
       this.loading = true
@@ -80,14 +75,27 @@ export default {
           }
         }
       })
-    }
+    },
+    // 获取分类
+    getTabList() {
+      this.$http.get('/mapi/category/getvediolist').then(res => {
+        if (res.status === 0) {
+           Hub.$emit('titlelist',this.titlelist)
+        }
+      })
+    },
   },
   created () {
+    this.getTabList()
     this.clickHandle()
   }
 }
 </script>
-
-<style scoped>
-
+<style lang="scss" scoped>
+.Video {
+      margin-top: 1rem;
+    .swiper-container {
+        z-index: 0;
+    }
+}
 </style>

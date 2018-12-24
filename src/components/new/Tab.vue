@@ -34,7 +34,7 @@ export default {
 <style lang="scss" scoped>
 .Tab {
   position: relative;
-  top: 0.9rem;
+  top: 0.1rem;
   left: 0;
   width: 100%;
   height: 0.8rem;
@@ -54,8 +54,8 @@ export default {
       font-size:0.3rem;
       display: inline-block;
       text-align: center;
-      height: 0.8rem;
-      line-height: 0.8rem;
+      height: 0.6rem;
+      line-height: 0.6rem;
 
     }
     .active {

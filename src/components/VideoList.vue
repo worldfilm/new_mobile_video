@@ -1,19 +1,13 @@
 <template>
-  <div class="Video slide-wrapper" >
-    <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide" >
-        <ul class="cube-slide">
-          <li v-for='item in list'  @click="toDetail(item.id)">
-            <img v-lazy="item.thumb_img_url" :key="item.thumb_img_url" />
-            <span class="iconfont icon-shoucang like"  @click="collect(item.id)" ></span>
-            <div class="time"></div>
-            <span class="title" v-text='item.title'></span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <div class="Video">
+    <ul class="cube-slide">
+      <li v-for='item in list'  @click="toDetail(item.id)">
+        <img v-lazy="item.thumb_img_url" :key="item.thumb_img_url" />
+        <span class="iconfont icon-shoucang like"  @click="collect(item.id)" ></span>
+        <div class="time"></div>
+        <span class="title" v-text='item.title'></span>
+      </li>
+    </ul>
   </div>
 </template>
 <!-- 插入广告 -->
@@ -27,9 +21,8 @@
 <script>
 import Hub from '@/components/Hub.vue'
 import BScroll from 'better-scroll'
-import Swiper from 'swiper';
-import 'swiper/dist/css/swiper.min.css';
 export default {
+  props:[],
   data () {
     return {
       isCollected: false,
@@ -46,30 +39,35 @@ export default {
      toDetail(id){
        this.$router.push({path: `/videoPlay/${id}`})
      },
-     // 获取视频列表
-     getlist(id) {
-       let param =  {
-         categoryid: id,
-         page: 1,
-         page_size: 10
-       }
-       this.$http.get('/mapi/category/categorydetail', param).then(res => {
-         if (res.status === 0) {
-           this.mainlist=res.data
-           if(this.tabnum==0){
-             this.list=this.mainlist.new
-             // console.log(this.list)
-           }
-           if(this.tabnum==1){
-             this.list=this.mainlist.hot
-             // console.log(this.list)
-           }
-           // 插入广告
-           // let hotlist=res.data.hot
-           // let newlist=res.data
-         }
-       })
+     getList(){
+         Hub.$on('titlelist',data=>{
+           this.titlelist=data
+         })
      },
+     // 获取视频列表
+     // getlist(id) {
+       // let param =  {
+       //   categoryid: id,
+       //   page: 1,
+       //   page_size: 10
+       // }
+       // this.$http.get('/mapi/category/categorydetail', param).then(res => {
+       //   if (res.status === 0) {
+       //     this.mainlist=res.data
+       //     if(this.tabnum==0){
+       //       this.list=this.mainlist.new
+       //       // console.log(this.list)
+       //     }
+       //     if(this.tabnum==1){
+       //       this.list=this.mainlist.hot
+       //       // console.log(this.list)
+       //     }
+       //     // 插入广告
+       //     // let hotlist=res.data.hot
+       //     // let newlist=res.data
+       //   }
+       // })
+     // },
      scrollFn () {
          if (!this.scroll) {
            this.scroll = new BScroll(this.$refs.bscroll, {
@@ -109,18 +107,13 @@ export default {
          }
      }
   },
-  mounted(){
-       var mySwiper = new Swiper('.swiper-container', {
-         scrollbar: '.swiper-scrollbar',
-         direction: 'vertical',
-         slidesPerView: 'auto',
-         freeMode: true
-       })
-     },
+  mounted() {
+     // console.log(this.titlelist)
+   },
   created () {
-    this.getlist(2)
+    this.getList()
     Hub.$on('Navheader',data=>{
-      this.getlist(data)
+      this.getList(data)
     })
     Hub.$on('Tab',data=>{
         this.tabnum=data
@@ -131,7 +124,6 @@ export default {
           this.list=this.mainlist.hot
         }
     })
-
   }
 }
 </script>
@@ -146,7 +138,7 @@ export default {
        float: left;
        margin: 0.5%;
        position: relative;
-       height: 3rem;
+       height: 2.7rem;
        overflow: hidden;
        text-overflow: ellipsis;
        white-space: nowrap;
@@ -167,7 +159,7 @@ export default {
        }
        img{
          width: 100%;
-         height: 2.6rem;
+         height: 2.3rem;
        }
     }
   }

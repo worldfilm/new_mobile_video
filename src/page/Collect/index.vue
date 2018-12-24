@@ -8,14 +8,14 @@
         </div>
       </div>
     </v-tab>
+    <Footer/>
   </div>
 </template>
-
 <script>
 import vTab from '@/components/tabs.vue'
 import videos from '@/components/videos.vue'
 import actorItem from '@/components/actorItem.vue'
-
+import Footer from '@/components/Footer.vue'
 const tabs = [
   {
     label: '女优',
@@ -34,7 +34,7 @@ export default {
   components: {
     vTab,
     videos,
-    actorItem
+    actorItem,Footer
   },
   data () {
     return {
