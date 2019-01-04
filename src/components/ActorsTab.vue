@@ -19,6 +19,7 @@
 </template>
 
 <script>
+// 字母查询滑动组件
 import actorItem from '@/components/actorItem.vue'
 import Swiper from 'swiper';
 import 'swiper/dist/css/swiper.min.css';

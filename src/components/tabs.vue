@@ -8,7 +8,6 @@
     <div class="tabHeader content-header" :class="{transition: !show}" v-if="isSubTab">
         <a href="javascript:;" :class="{active: subSelect==='new'}" @click="subSelect='new'">最新</a>
         <a href="javascript:;" :class="{active: subSelect==='hot'}" @click="subSelect='hot'">最热</a>
-        <!-- <span class="el-icon-menu"></span> -->
     </div>
     <div class="tabContainer" ref="bscroll" :class="{_tabContainer: isSubTab, _height: !show}">
       <div class="wrapper">

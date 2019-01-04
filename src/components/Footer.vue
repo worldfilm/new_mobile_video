@@ -1,9 +1,9 @@
 <template>
   <div class='Footer'>
     <div class="AppFooter" v-for="(item, index) in AppFooter" :key="index">
-      <a :href="item.url" target="_blank">
+      <router-link :to="item.url" target="_blank">
         <img :src="item.img_url"/>
-      </a>
+      </router-link>
     </div>
     <div class="list">
       <router-link v-for="item in navlist" :to='item.to'>

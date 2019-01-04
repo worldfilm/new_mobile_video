@@ -1,6 +1,6 @@
 <template>
   <div class="Tag">
-    <Navheader/>
+    <Navheader :title='Tag'/>
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
@@ -29,11 +29,12 @@ export default {
   },
   data () {
     return {
+      Tag:'Tag',
       // componentId: 0,
       // tabs,
       // videos: [],
       // loading: false
-      titlelist:[{name: '女优列表',id: 0},{name: 'AV分类',id: 1},{name: '视频分类',id: 2}],
+      // titlelist:[{name: '女优列表',id: 0},{name: 'AV分类',id: 1},{name: '视频分类',id: 2}],
     }
   },
   methods: {
@@ -41,16 +42,16 @@ export default {
     //   this.componentId = id
     // }
     // 获取分类
-    getTabList() {
-      this.$http.get('/mapi/category/getvediolist').then(res => {
-        if (res.status === 0) {
-           Hub.$emit('titlelist',this.titlelist)
-        }
-      })
-    },
+    // getTabList() {
+    //   this.$http.get('/mapi/category/getvediolist').then(res => {
+    //     if (res.status === 0) {
+    //        Hub.$emit('titlelist',this.titlelist)
+    //     }
+    //   })
+    // },
   },
   created() {
-    this.getTabList()
+    // this.getTabList()
   }
 }
 </script>
