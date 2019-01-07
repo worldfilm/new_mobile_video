@@ -1,6 +1,6 @@
 <template>
   <div class="pay">
-    <header-bar></header-bar>
+    <HeaderBar/>
     <div class="pay-box" v-loading="loading">
       <ul class="clearfix">
         <li v-for='(item, index) in list' :key="index" class="package-content" :class="{active: index===selected}" @click="selected = index">
@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import headerBar from '@/components/layout/headerBar.vue'
+import HeaderBar from '@/components/HeaderBar.vue'
 export default {
   components: {
-    headerBar
+    HeaderBar
   },
   data () {
     return {

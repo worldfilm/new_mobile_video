@@ -1,6 +1,6 @@
 <template>
   <div class="actor-detail">
-    <header-bar></header-bar>
+    <HeaderBar/>
     <!-- 女优详情 -->
     <div class="info clearfix">
       <div class="fl">
@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import headerBar from '@/components/layout/headerBar.vue'
+import HeaderBar from '@/components/HeaderBar.vue'
 import actorsWorks from '@/components/actorsWorks.vue'
 
 export default {
   components: {
-    headerBar,
+    HeaderBar,
     actorsWorks
   },
   data () {

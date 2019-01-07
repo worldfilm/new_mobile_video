@@ -1,8 +1,8 @@
 <template>
   <div class="my-profile" v-loading="loading">
-    <header-bar>
+    <HeaderBar>
       <span @click="toEdit">编辑</span>
-    </header-bar>
+    </HeaderBar>
     <el-form ref="form" label-width="2rem" class="form-box">
       <el-form-item label="用户名：">
         {{userInfo.username}}
@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import headerBar from '@/components/layout/headerBar.vue'
+import HeaderBar from '@/components/HeaderBar.vue'
 export default {
   components: {
-    headerBar
+    HeaderBar
   },
   data () {
     return {

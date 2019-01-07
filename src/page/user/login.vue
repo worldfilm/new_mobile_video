@@ -1,6 +1,6 @@
 <template>
 <div class="register-pop" v-loading="loading">
-  <header-bar></header-bar>
+  <HeaderBar/>
   <div class="register-pop-container">
     <div class="register-pop-content">
       <form role="form" id="signUpForm" novalidate="novalidate">
@@ -28,12 +28,12 @@
 </div>
 </template>
 <script>
-import headerBar from "@/components/layout/headerBar.vue";
+import HeaderBar from "@/components/HeaderBar.vue";
 import axios from 'axios'
 
 export default {
    components: {
-    headerBar
+    HeaderBar
   },
   data() {
     return {
@@ -156,7 +156,7 @@ export default {
     checkuser(){
       let api_token= sessionStorage.getItem("TOKEN_KEY");
       if(!api_token){
-         
+
       }
     }
   },

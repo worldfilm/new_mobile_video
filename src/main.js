@@ -13,11 +13,12 @@ import './assets/themes/element-variables.scss'
 import './assets/font/iconfont.css'
 import './assets/fonts/iconfont.css'
 import './assets/main.css'
+// import   './assets/ckplayer.js'
 import store from './store'
 Vue.use(VueLazyload, {
-  error:'/ABP-068.jpg',
+  error:'/default1.jpg',
   throttleWait: 100,
-  loading: '/ABP-068.jpg',
+  loading: '/default1.jpg',
   listenEvents: ['scroll', 'touchmove']
 })
 Vue.prototype.$bus = bus

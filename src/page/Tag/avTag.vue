@@ -30,7 +30,7 @@ export default {
     },
     // 跳转
     toPage (item) {
-      this.$router.push({path: '/results', query: {name: item.name, id: item.id}})
+      this.$router.push({path: '/VideosResult', query: {name: item.name, id: item.id}})
     }
   },
   created () {

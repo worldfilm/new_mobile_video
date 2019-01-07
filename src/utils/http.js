@@ -16,7 +16,7 @@ if(originUrl=="http://dist.6fg645fsd.com"||
     ){
 
    config = {
-    baseURL: 'http://webvideo.6fg645fsd.com',
+    baseURL: 'https://webvideo.6fg645fsd.com',
     timeout: 30000
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="user-safe">
-    <header-bar></header-bar>
+    <HeaderBar/>
     <div class="tab">
       <a href="javascript:;" :class="{active: tabId === 0}" @click="tabId = 0">账户密码</a>
       <a href="javascript:;" :class="{active: tabId === 2}" @click="tabId = 2">支付密码</a>
@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import headerBar from '@/components/layout/headerBar.vue'
+import HeaderBar from '@/components/HeaderBar.vue'
 import changePassword from './components/changePassword.vue'
 import changePayPassword from './components/changePayPassword.vue'
 
 export default {
   components: {
-    headerBar,
+    HeaderBar,
     changePassword,
     changePayPassword
   },

@@ -1,13 +1,14 @@
 <template>
   <div class="video-player">
-    <header-bar></header-bar>
+    <HeaderBar/>
     <div class="player-box">
-      <div v-for="(item, index) in AdvertisingSectionList" :key="index">
+      <!-- App播放页顶部广告 -->
+      <div v-for="(item, index) in AppPlayTop" :key="index">
         <a :href="item.url"  target="_blank" >
-          <h3 class="title more_text_splice">{{item.title}}</h3>
           <img class="proImg" :src="item.img_url"/>
         </a>
-      </div>  
+      </div>
+      <!-- App播放页顶部广告 -->
       <h3 class="title more_text_splice">{{videoInfo.title}}</h3>
       <video width="100%" controls="controls" :src="videoInfo.play_url" :poster="videoInfo.thumb_img_url">
         您的浏览器不支持 video 标签
@@ -34,6 +35,13 @@
           举报
         </div>
       </div>
+      <!-- App播放页中间广告 -->
+      <div v-for="(item, index) in AppPlayCenter">
+        <a :href="item.url"  target="_blank" >
+          <img class="proImg" :src="item.img_url"/>
+        </a>
+      </div>
+      <!-- App播放页中间广告 -->
       <div class="video-info">
         <div>
           视频简介：{{videoInfo.description}}
@@ -69,10 +77,11 @@
 </template>
 
 <script>
-import headerBar from '@/components/layout/headerBar.vue'
+import HeaderBar from '@/components/HeaderBar.vue'
+
 export default {
   components: {
-    headerBar
+    HeaderBar
   },
   props: ['id'],
   data () {
@@ -80,7 +89,8 @@ export default {
       comment: '',
       commentList: [],
       videoInfo: {},
-      AdvertisingSectionList:[]
+      AppPlayTop:[],
+      AppPlayCenter:[],
     }
   },
   computed: {
@@ -96,10 +106,17 @@ export default {
         }
       })
     },
-    getAdvertisingSection(){
-      this.$http.get('/api/advert/list',{cate_code:'VideoDetail'}).then(res => {
+    getAdTop(){//App播放页顶部广告
+      this.$http.get('/api/advert/list',{cate_code:'AppPlayTop'}).then(res => {
         if (res.status === 0) {
-          this.AdvertisingSectionList = res.data
+          this.AppPlayTop = res.data
+        }
+      })
+    },
+    getAppPlayCenter(){//App播放页中间广告
+      this.$http.get('/api/advert/list',{cate_code:'AppPlayCenter'}).then(res => {
+        if (res.status === 0) {
+          this.AppPlayCenter = res.data
         }
       })
     },
@@ -156,9 +173,10 @@ export default {
     }
   },
   created () {
-    this.getAdvertisingSection()
+    this.getAdTop()
     this.getVideoInfo()
     this.getVideoComment()
+    this.getAppPlayCenter()
   }
 }
 </script>

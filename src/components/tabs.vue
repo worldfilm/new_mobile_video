@@ -1,27 +1,25 @@
 <template>
-  <div class="tabs">
-    <div class="tabHeader shadow">
-      <a href="javascript:;" v-for="(item, index) in tabs" :key="index" @click="tabClick(item.id)" :class="{active: selected===item.id}">
+<div class="tabs">
+  <div class="tabHeader shadow">
+    <a href="javascript:;" v-for="(item, index) in tabs" :key="index" @click="tabClick(item.id)" :class="{active: selected===item.id}">
         {{item.label}}
       </a>
-    </div>
-    <div class="tabHeader content-header" :class="{transition: !show}" v-if="isSubTab">
-        <a href="javascript:;" :class="{active: subSelect==='new'}" @click="subSelect='new'">最新</a>
-        <a href="javascript:;" :class="{active: subSelect==='hot'}" @click="subSelect='hot'">最热</a>
-    </div>
-    <div class="tabContainer" ref="bscroll" :class="{_tabContainer: isSubTab, _height: !show}">
-      <div class="wrapper">
-        <div class="loading" style="position: relative;top: 0;" v-if="dropDown"><span class="el-icon-loading"></span></div>
-        <slot></slot>
-        <div class="loading" v-if="dropUp"><span class="el-icon-loading"></span></div>
-      </div>
+  </div>
+  <div class="tabHeader content-header" :class="{transition: !show}" v-if="isSubTab">
+    <a href="javascript:;" :class="{active: subSelect==='new'}" @click="subSelect='new'">最新</a>
+    <a href="javascript:;" :class="{active: subSelect==='hot'}" @click="subSelect='hot'">最热</a>
+  </div>
+  <div class="tabContainer" ref="bscroll" :class="{_tabContainer: isSubTab}">
+    <div class="wrapper">
+      <div class="loading" style="position: relative;top: 0;" v-if="dropDown"><span class="el-icon-loading"></span></div>
+      <slot></slot>
+      <div class="loading" v-if="dropUp"><span class="el-icon-loading"></span></div>
     </div>
   </div>
+</div>
 </template>
-
 <script>
 import BScroll from 'better-scroll'
-
 export default {
   props: {
     tabs: {
@@ -39,7 +37,7 @@ export default {
       default: true
     }
   },
-  data () {
+  data() {
     return {
       selected: null,
       subSelect: 'new',
@@ -50,29 +48,29 @@ export default {
   },
   watch: {
     tabs: {
-      handler: function (newVal) {
+      handler: function(newVal) {
         if (!newVal.length) return
         this.selected = newVal[0].id || 0
         this.$emit('clickHandle', this.selected, this.subSelect)
       },
       immediate: true
     },
-    subSelect (newStr) {
+    subSelect(newStr) {
       this.$emit('clickHandle', this.selected, newStr)
     }
   },
   methods: {
-    tabClick (id) {
+    tabClick(id) {
       if (this.selected === id) return
       this.subSelect = 'new'
       this.selected = id
       this.$emit('clickHandle', id, this.subSelect)
     },
-    subTabClick (str) {
+    subTabClick(str) {
       this.subSelect = str
       this.$emit('clickHandle', this.selected, this.subSelect)
     },
-    scrollFn () {
+    scrollFn() {
       this.$nextTick(() => {
         if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.bscroll, {
@@ -114,7 +112,7 @@ export default {
       })
     }
   },
-  mounted () {
+  mounted() {
     this.scrollFn()
   }
 }
@@ -122,89 +120,91 @@ export default {
 
 <style lang="scss" scoped>
 .shadow {
-  box-shadow: 0px 2px 8px #fe7a94;
+    box-shadow: 0 2px 8px #fe7a94;
 }
 .tabHeader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  display: -webkit-flex;
-  width: 100%;
-  height: 0.8rem;
-  background: #fff;
-  z-index: 100;
-  transition: all .3s;
-  a {
-    flex-grow: 1;
-    font-size: 0.25rem;
-    line-height: 0.8rem;
-    text-align: center;
-    font-weight: 600;
-    &.active {
-      color: #fe7a94;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    display: -webkit-flex;
+    width: 100%;
+    height: 0.8rem;
+    background: #fff;
+    z-index: 100;
+    transition: all 0.3s;
+    a {
+        flex-grow: 1;
+        font-size: 0.25rem;
+        line-height: 0.7rem;
+        text-align: center;
+        font-weight: 600;
+        &.active {
+            color: #fe7a94;
+        }
     }
-  }
 }
 .content-header {
     top: 1rem;
     left: 50%;
     transform: translate(-50%);
-    width: 70%;
     margin: 0 auto;
     background: #fff;
-    border-radius: 25px;
+    padding: 0.1rem 0.8rem 0.07rem;
     a {
-      width: 50%;
-      border-radius: 0 25px 25px 0;
-      border: 2px solid #fe7a94;
-      margin-right: -1px;
-      &:first-child {
-        border-radius: 25px 0 0 25px;
-        margin-left: -1px;
-      }
-      &.active {
-        color: #fff;
-        background: #fe7a94;
-      }
+        width: 50%;
+        border-radius: 0 25px 25px 0;
+        border: 2px solid #fe7a94;
+        margin-right: -1px;
+        &:first-child {
+            border-radius: 25px 0 0 25px;
+            margin-left: -1px;
+        }
+        &.active {
+            color: #fff;
+            background: #fe7a94;
+        }
     }
-  }
+}
 .tabContainer {
-  position: absolute;
-  top: 0.8rem;
-  left: 0;
-  width: 100%;
-  height: calc(100% - 1rem);
-  padding: 0rem;
-  overflow: hidden;
+    // position: absolute;
+    // top:0.8rem;
+    // left: 0;
+    // width: 100%;
+    // height: calc(100% - 1rem);
+    // padding: 0;
+    // overflow: hidden;
+    // padding-top: 2rem;
 }
 ._tabContainer {
-  top: 1.7rem;
-  height: calc(100% - 2rem);
+    // top: 1.7rem;
+    // height: calc(100% - 2rem);
 }
 .wrapper {
-  padding-bottom: 0.8rem;
-  position: relative;
-  .loading {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 0.8rem;
-    line-height: 0.8rem;
-    text-align: center;
-    .el-icon-loading {
-      font-size: 0.6rem;
+    padding-bottom: 0.8rem;
+    position: relative;
+    .loading {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0.8rem;
+        line-height: 0.8rem;
+        text-align: center;
+        .el-icon-loading {
+            font-size: 0.6rem;
+        }
     }
-  }
 }
 .transition {
-  height: 0 !important;
-  opacity: 0;
-  transition: all .3s;
+    height: 0 !important;
+    opacity: 0;
+    transition: all 0.3s;
 }
 ._height {
-  top: 0.8rem;
-  height: calc(100% - 1.2rem);
+  // padding-top: 2rem;
+
+    // top: 0.8rem;
+    // height: calc(100% - 1.2rem);
 }
 </style>

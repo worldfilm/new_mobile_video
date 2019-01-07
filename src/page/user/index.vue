@@ -1,12 +1,12 @@
 <template>
-    <div class="person">
-      <div class="TopAdvertisingSection" v-for="(item, index) in TopAdvertisingSectionList" :key="index">
-        <a :href="item.url"  target="_blank" >
+<div class="person">
+  <div class="TopAdvertisingSection" v-for="(item, index) in AppUserTop" :key="index">
+    <a :href="item.url" target="_blank">
           <img :src="item.img_url"/>
         </a>
-      </div>
-        <div class="avatar-box">
-            <template v-if="userInfo">
+  </div>
+  <div class="avatar-box">
+    <template v-if="userInfo">
                 <div class="avatar" @click="toPage">
                     <!-- <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                         <img :src="userInfo.avatar" class="avatar">
@@ -20,80 +20,82 @@
                 <el-button type="primary" v-if="!userInfo.is_vip" @click="toVip" round>充值VIP</el-button>
                 <a href="javascript:;" @click="logout" class="logout">退出</a>
             </template>
-            <template v-else>
+    <template v-else>
                 <div class="nologin-tips">
                     请先
                     <el-button type="primary" round @click="$router.push('/login')">登录</el-button>
                 </div>
             </template>
-        </div>
-        <div class="person-center">
-            <ul>
-                <li>
-                    <router-link to="/myVideos" class="clearfix">
-                        <div class="fl">
-                            <i class="iconfont icon-shipin"></i>我的视频
-                        </div>
-                        <div class="fr">
-                            <i class="iconfont icon-jiantou"></i>
-                        </div>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/profile" class="clearfix">
-                        <div class="fl">
-                            <i class="iconfont icon-ziliao"></i>我的资料
-                        </div>
-                        <div class="fr">
-                            <i class="iconfont icon-jiantou"></i>
-                        </div>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/collect" class="clearfix">
-                        <div class="fl">
-                            <i class="iconfont icon-shoucang"></i>我的收藏
-                        </div>
-                        <div class="fr">
-                            <i class="iconfont icon-jiantou"></i>
-                        </div>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/userSafe" class="clearfix">
-                        <div class="fl">
-                            <i class="iconfont icon-wode"></i>账户安全
-                        </div>
-                        <div class="fr">
-                            <i class="iconfont icon-jiantou"></i>
-                        </div>
-                    </router-link>
-                </li>
-            </ul>
-        </div>
-    </div>
+  </div>
+  <div class="person-center">
+    <ul>
+      <li>
+        <router-link to="/myVideos" class="clearfix">
+          <div class="fl">
+            <i class="iconfont icon-shipin"></i>我的视频
+          </div>
+          <div class="fr">
+            <i class="iconfont icon-jiantou"></i>
+          </div>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/profile" class="clearfix">
+          <div class="fl">
+            <i class="iconfont icon-ziliao"></i>我的资料
+          </div>
+          <div class="fr">
+            <i class="iconfont icon-jiantou"></i>
+          </div>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/collect" class="clearfix">
+          <div class="fl">
+            <i class="iconfont icon-shoucang"></i>我的收藏
+          </div>
+          <div class="fr">
+            <i class="iconfont icon-jiantou"></i>
+          </div>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/userSafe" class="clearfix">
+          <div class="fl">
+            <i class="iconfont icon-wode"></i>账户安全
+          </div>
+          <div class="fr">
+            <i class="iconfont icon-jiantou"></i>
+          </div>
+        </router-link>
+      </li>
+    </ul>
+  </div>
+</div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       userInfo: null,
-      TopAdvertisingSectionList:[]
+      AppUserTop: []
     }
   },
   methods: {
-    getTopAdvertisingSectionList(){
-      this.$http.get('/api/advert/list',{cate_code:'AppUserTop'}).then(res => {
+    getAppUserTop() { //App个人中心顶部广告
+      this.$http.get('/api/advert/list', {
+        cate_code: 'AppUserTop'
+      }).then(res => {
         if (res.status === 0) {
-          this.TopAdvertisingSectionList = res.data
+          this.AppUserTop = res.data
         }
       })
     },
-    toVip () {
+    toVip() {
       this.$router.push('/pay')
     },
-    logout () {
+    logout() {
       this.$confirm('是否确认退出登录？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -120,70 +122,78 @@ export default {
         })
       })
     },
-    toPage () {
+    toPage() {
       this.$router.push('/changeAvator')
     }
   },
-  created () {
+  created() {
     this.userInfo = this.$user.getUserInfo()
-    this.getTopAdvertisingSectionList()
+    this.getAppUserTop()
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .person {
-  margin-top: -0.2rem;
-  font-size: 0.2rem;
-  .avatar-box {
-    position: relative;
-    height: 4.5rem;
-    padding: 0.3rem 0;
-    text-align: center;
-    background: #f1f1f1;
-    box-shadow: -1px 0px 1px #ccc;
-    .avatar {
-      width: 2rem;
-      height: 2rem;
-      margin: 0 auto;
-      img {
-        border-radius: 50%;
-      }
+    margin-top: -0.2rem;
+    font-size: 0.2rem;
+    .avatar-box {
+        position: relative;
+        height: 4.5rem;
+        padding: 0.3rem 0;
+        text-align: center;
+        background: #f1f1f1;
+        box-shadow: -1px 0 1px #ccc;
+        .avatar {
+            width: 2rem;
+            height: 2rem;
+            margin: 0 auto;
+            img {
+                border-radius: 50%;
+            }
+        }
+        .username {
+            font-size: 0.4rem;
+            line-height: 1rem;
+            .vip-icon {
+                color: #f00;
+            }
+        }
+        .logout {
+            position: absolute;
+            top: 0.1rem;
+            right: 0.1rem;
+            color: #FE7A94;
+            font-size: 0.3rem;
+            padding: 0.3rem;
+        }
+        .nologin-tips {
+            line-height: 4.5rem;
+            font-size: 0.3rem;
+        }
+        .el-button.is-round {
+            padding: 0.16rem 0.30667rem;
+            font-size: 0.3rem;
+        }
     }
-    .username {
-      font-size: 0.4rem;
-      line-height: 1rem;
-      .vip-icon {
-        color: #f00;
-      }
-    }
-    .logout {
-      position: absolute;
-      top: 0.1rem;
-      right: 0.1rem;
-      color: #FE7A94;
-    }
-    .nologin-tips {
-      line-height: 4.5rem;
-    }
-  }
 
-  .person-center {
-    border-top: 1px solid #f1f1f1;
-    margin-top: 0.3rem;
-    li {
-      padding: 0 0.2rem;
-      border-bottom: 1px solid #f1f1f1;
-      line-height: 0.8rem;
-      font-size: 0.3rem;
-      .iconfont {
-        margin-right: 0.1rem;
-        font-size: 0.35rem;
-      }
-      div.fr {
-        transform: rotate(-90deg);
-      }
+    .person-center {
+        border-top: 1px solid #f1f1f1;
+        margin-top: 0.3rem;
+        padding-bottom: 3rem;
+        li {
+            padding: 0 0.2rem;
+            border-bottom: 1px solid #f1f1f1;
+            line-height: 0.8rem;
+            font-size: 0.3rem;
+            .iconfont {
+                margin-right: 0.1rem;
+                font-size: 0.35rem;
+            }
+            div.fr {
+                transform: rotate(-90deg);
+            }
+        }
     }
-  }
 }
 </style>

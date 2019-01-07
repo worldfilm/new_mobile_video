@@ -1,7 +1,7 @@
 <template>
   <div class="Forgetpsw">
     <div class="login" v-loading="loading">
-     <header-bar></header-bar>
+     <HeaderBar/>
     <p class="findtitle"><i></i><span>你可以通过你的绑定邮箱找回密码!</span></p>
     <div class="progress">
       <el-steps :active="active" finish-status="success">
@@ -75,7 +75,7 @@
   </div>
 </template>
 <script>
-import headerBar from "@/components/layout/headerBar.vue";
+import HeaderBar from "@/components/HeaderBar.vue";
 export default {
   data() {
     return {
@@ -109,7 +109,7 @@ export default {
       loading: false
     };
   },
-  components: { headerBar },
+  components: { HeaderBar },
   methods: {
     // 发送验证码
     sendMail() {

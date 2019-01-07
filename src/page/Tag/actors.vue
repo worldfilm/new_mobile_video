@@ -69,7 +69,7 @@ export default {
     }
   },
   mounted(){
-       var mySwiper = new Swiper('.swiper-container', {
+       var mySwiper2 = new Swiper('.swiper-container', {
          scrollbar: '.swiper-scrollbar',
          direction: 'horizontal',
          slidesPerView: 'auto',

@@ -1,6 +1,6 @@
 <template>
   <div class="change-avator">
-    <header-bar></header-bar>
+    <HeaderBar/> 
     <div class="change-box" v-loading="loading">
       <span>当前头像：</span>
       <div class="avatar">
@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import headerBar from '@/components/layout/headerBar.vue'
+import HeaderBar from '@/components/HeaderBar.vue'
 export default {
   components: {
-    headerBar
+    HeaderBar
   },
   data () {
     return {

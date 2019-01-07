@@ -1,6 +1,6 @@
 <template>
 <div class="Upload" v-loading="loading">
-  <header-bar></header-bar>
+  <HeaderBar/>
   <div class="content">
     <p>
       <span class="title">标题</span>
@@ -36,7 +36,7 @@
 </div>
 </template>
 <script>
-import headerBar from "@/components/layout/headerBar.vue";
+import HeaderBar from "@/components/HeaderBar.vue";
 import tagList from './components/tagList.vue'
 
 export default {
@@ -168,7 +168,7 @@ export default {
                 type: 'error'
               });
         this.fileupload = 'filesureupload'
-        
+
         this.$refs.upload.clearFiles();
       }
     },
@@ -231,7 +231,7 @@ export default {
       this.tagIds.push(name);
       this.showMask = false;
     },
-    
+
     checkInfo() {
       if (this.isText && this.isTextare && this.isUpload && this.isTags ) {
         this.changedisable = false
@@ -246,7 +246,7 @@ export default {
     this.$refs.upload.clearFiles();
   },
   components: {
-    headerBar,tagList
+    HeaderBar,tagList
   },
   created() {
     let api_token = this.$user.getUserInfo().api_token;

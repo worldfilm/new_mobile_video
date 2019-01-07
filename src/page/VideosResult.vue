@@ -1,24 +1,24 @@
 <template>
   <div class="videos-result">
-    <header-bar :titler="headerTitle"></header-bar>
+    <HeaderBar :titler="headerTitle"/>
     <div class="tabHeader">
       <a href="javascript:;" :class="{active: subSelect==='new'}" @click="subSelect='new'">最新</a>
       <a href="javascript:;" :class="{active: subSelect==='hot'}" @click="subSelect='hot'">最热</a>
     </div>
     <div class="res-container" v-loading="loading">
-      <videos :video-item="item" v-for="(item) in showRes" :key="item.id"></videos>
+      <VideoList :video-item="item" v-for="(item) in showRes" :key="item.id"/>
     </div>
   </div>
 </template>
 
 <script>
-import headerBar from '@/components/layout/headerBar.vue'
-import videos from '@/components/videos.vue'
+import HeaderBar from '@/components/HeaderBar.vue'
+import VideoList from '@/components/VideoList.vue'
 
 export default {
   components: {
-    headerBar,
-    videos
+    HeaderBar,
+    VideoList
   },
   data () {
     return {
@@ -90,7 +90,6 @@ export default {
   left: 0;
   width: 100%;
   height: calc(100% - 0.8rem);
-  padding: 0 0.15rem;
   padding-top: 0.2rem;
   overflow: hidden;
   overflow-y: auto;

@@ -1,19 +1,20 @@
 <template>
-  <div>
+  <div class="Collect">
     <v-tab :tabs="tabs" @clickHandle="clickHandle">
       <div v-loading="loading" style="height: 100%;">
         <div class="actors-container">
           <actor-item v-if="tabId === '0'" :actor-info="item" v-for="(item, index) in actors" class="act-item" :key="index" @click="toDetail(item)"/>
-          <videos v-if="['1','2'].indexOf(tabId) > -1"  :show-collect="false" :video-item="item" v-for="(item) in videos" :key="item.id"></videos>
+          <VideoList v-if="['1','2'].indexOf(tabId) > -1"  :show-collect="false" :video-item="item" v-for="(item) in videos" :key="item.id"/>
         </div>
       </div>
     </v-tab>
     <Footer/>
   </div>
 </template>
+
 <script>
 import vTab from '@/components/tabs.vue'
-import videos from '@/components/videos.vue'
+import VideoList from '@/components/VideoList.vue'
 import actorItem from '@/components/actorItem.vue'
 import Footer from '@/components/Footer.vue'
 const tabs = [
@@ -33,8 +34,9 @@ const tabs = [
 export default {
   components: {
     vTab,
-    videos,
-    actorItem,Footer
+    VideoList,
+    actorItem,
+    Footer
   },
   data () {
     return {
@@ -101,6 +103,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.Collect{
+  // width: 8rem;
+// height: 20rem;
+}
 .actors-container {
   margin-top: 0.2rem;
   flex-wrap: wrap;

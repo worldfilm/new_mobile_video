@@ -1,114 +1,146 @@
 <template>
-<div class="AV">
-  <Navheader :title='title'/>
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <Tab/>
-        <VideoList :list="VList"/>
-      </div>
-    </div>
+  <div class="AV">
+      <v-tab :isSubTab="true" @refresh="param.page++" :tabs="tabs" @clickHandle="clickHandle">
+        <div style="height: 100%" class="clearfix" @refresh="param.page++" v-loading="loading">
+          <VideoList :video-item="item" v-for="(item, index) in showRes" :key="item.id+index" />
+        </div>
+      </v-tab>
+      <Footer/>
   </div>
-  <Footer/>
-</div>
 </template>
+
 <script>
-import Hub from '@/components/Hub.vue'
+import vTab from '@/components/tabs.vue'
 import VideoList from '@/components/VideoList.vue'
-import Navheader from '@/components/Navheader.vue'
 import Footer from '@/components/Footer.vue'
-import Tab from '@/components/new/Tab.vue'
-import Swiper from 'swiper';
-import 'swiper/dist/css/swiper.min.css';
+
 export default {
   components: {
-    VideoList,
-    Navheader,
-    Tab,
-    Footer
+    vTab,
+    VideoList,Footer
   },
-  data() {
+  data () {
     return {
-      titlelist:{},
-      VList:[],
-      title:"AV"
-    }
-  },
-  computed: {},
-  watch: {},
-  methods: {
-    // 获取分类
-    // getTabList() {
-    //   this.$http.get('/mapi/category/getvediolist').then(res => {
-    //     if (res.status === 0) {
-    //        this.titlelist=res.data
-    //     }
-    //   })
-    // },
-    // // 在线广告
-    // Onlineadvertising(){
-    //   this.$http.get('/api/advert/list',{cate_code:'WebVideoList'}).then(res => {
-    //     if (res.status === 0) {
-    //       this.WebVideoList = res.data
-    //     }
-    //   })
-    // },
-    // 获取视频列表
-    getVideoList(id) {
-      let param = {
-        categoryid: id,
+      hotListData:[],
+      WebVideoList:[],
+      tabs: [],
+      videos: {
+        hot: [],
+        new: []
+      },
+      param: {
+        categoryid: null,
         page: 1,
         page_size: 10
+      },
+      resStr: 'new',
+      loading: false
+    }
+  },
+  computed: {
+    showRes () {
+      // debugger
+      return this.videos[this.resStr] || []
+    }
+  },
+  watch: {
+    'param.page' () {
+      this.getVideosByCategory()
+    },
+    'param.categoryid' () {
+      this.loading = true
+      this.resStr = 'new'
+      this.videos = {
+        hot: [],
+        new: []
       }
-      this.$http.get('/mapi/category/categorydetail', param).then(res => {
+      this.getVideosByCategory()
+    },
+    resStr () {
+      this.videos = {
+        hot: [],
+        new: []
+      }
+      this.param.page === 1 ? this.getVideosByCategory() : this.param.page = 1
+    }
+  },
+  methods: {
+    clickHandle (id, str) {
+      this.resStr = str
+      this.param.categoryid = id
+      this.param.page = 1
+    },
+    // 获取分类
+    getCategory () {
+      this.$http.get('/mapi/category/getvediolist').then(res => {
         if (res.status === 0) {
-          this.VList=res.data
-          // Hub.$emit('VList',this.VList)
-          // this.mainlist = res.data
-          // if (this.tabnum == 0) {
-          //   this.list = this.mainlist.new
-          // }
-          // if (this.tabnum == 1) {
-          //   this.list = this.mainlist.hot
-          // }
-          // 插入广告
-          // let hotlist=res.data.hot
-          // let newlist=res.data
+          this.tabs = res.data.map(item => {
+            return {
+              id: item.id,
+              label: item.name
+            }
+          })
+          this.param.categoryid = this.tabs[0].id
         }
       })
     },
-    getID(){
-      Hub.$on('Navheader', data=>{
-        this.getVideoList(data)
+    // 在线广告
+    Onlineadvertising(){
+      this.$http.get('/api/advert/list',{cate_code:'AppVideoList'}).then(res => {
+        if (res.status === 0) {
+          this.WebVideoList = res.data
+        }
+      })
+    },
+    // 获取视频列表
+    getVideosByCategory () {
+      let param = this.param
+      this.$http.get('/mapi/category/categorydetail', param).then(res => {
+        if (res.status === 0) {
+          // 插入广告
+          let hotlist=res.data.hot
+          let newlist=res.data.new
+          for(var i in hotlist){
+            if(i / 5 >= 1 && i % 5 == 0){
+              hotlist[i].xxx = this.WebVideoList[this.param.page -1]
+              this.hotListData = hotlist[i].xxx
+            }
+          }
+          if(this.hotListData === undefined){
+            } else{
+              window.sessionStorage.setItem('hotListData', JSON.stringify(this.hotListData))
+          }
+          for(var i in newlist){
+            if(i / 5 >= 1 && i % 5 == 0){
+              newlist[i].xxx = this.WebVideoList[this.param.page -1]
+              this.hotListData = newlist[i].xxx
+            }
+          }
+          if(this.hotListData === undefined){
+            } else{
+              window.sessionStorage.setItem('hotListData', JSON.stringify(this.hotListData))
+          }
+          res.data={'new':newlist,'hot':hotlist}
+          // debugger
+          // 插入广告
+          this.videos[this.resStr] = this.videos[this.resStr].concat(res.data[this.resStr])
+          this.$children[0].dropDown = false
+          this.$children[0].dropUp = false
+          this.loading = false
+        }
       })
     }
   },
-  mounted() {
-    var mySwiper = new Swiper('.swiper-container', {
-      scrollbar: '.swiper-scrollbar',
-      direction: 'vertical',
-      slidesPerView: 'auto',
-      freeMode: true
-    })
-
-  },
-  created() {
-    this.getVideoList(2)// 获取视频列表
-    // this.getTabList()// 获取分类
-    // Hub.$emit('titlelist','AV')
-    // this.getID()
-    Hub.$on('Navheader', data=>{
-      this.getVideoList(data)
-    })
+  created () {
+    this.getCategory()
+    this.Onlineadvertising()
   }
 }
 </script>
-<style lang="scss" scoped>
-.AV {
-      margin-top: 1rem;
-    .swiper-container {
-        z-index: 0;
 
-    }
+<style scoped>
+.AV{
+  /* width: 8rem; */
+/* height: 20rem; */
 }
 </style>

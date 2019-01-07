@@ -1,9 +1,9 @@
 <template>
   <div class="header-bar">
     <span class="left-btn iconfont icon-jiantou" @click="goBack"></span>
-    <div class="title" v-text='title'></div>
+    <div class="title">{{title}}</div>
     <div class="right-btn">
-      <router-link :to="{ name: 'path', params: {'ccc':'zzz'} }"></router-link>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -16,25 +16,19 @@ export default {
     }
   },
   data () {
-    return {
-      title:'',
-      path:'',
+    return {}
+  },
+  computed: {
+    title () {
+      return this.$route.meta.title || this.titler
     }
   },
-  // computed: {
-  //   title () {
-  //     return this.$route.meta.title || this.titler
-  //   }
-  // },
   methods: {
     goBack () {
       window.history.length > 1
         ? this.$router.go(-1)
         : this.$router.push('/')
     }
-  },
-  created (){
-
   }
 }
 </script>

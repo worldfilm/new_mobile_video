@@ -1,96 +1,101 @@
 <template>
-  <div class='Footer'>
-    <div class="AppFooter" v-for="(item, index) in AppFooter" :key="index">
-      <router-link :to="item.url" target="_blank">
-        <img :src="item.img_url"/>
-      </router-link>
+<div>
+    <div class="bottomAdvertisingSection" v-for="(item, index) in bottomAdvertisingSectionList" :key="index">
+        <a :href="item.url"  target="_blank" >
+          <img :src="item.img_url"/>
+        </a>
     </div>
-    <div class="list">
-      <router-link v-for="item in navlist" :to='item.to'>
-        <i :class="item.class"></i>
-        <span v-text="item.name"></span>
-      </router-link>
+    <div class="footer">
+        <router-link :to="{path:'AV', query: { active: true }}" @click='linkAV'>
+            <span class="iconfont icon-shipin1"></span>
+            AV
+        </router-link>
+        <router-link to='/Video'>
+            <span class="iconfont icon-shipin"></span>
+            视频
+        </router-link>
+        <router-link to='/tag'>
+            <span class="iconfont icon-tag"></span>
+            分类
+        </router-link>
+        <router-link to='/Collect'>
+            <span class="iconfont icon-shoucang"></span>
+            收藏
+        </router-link>
+        <router-link to='/user'>
+            <span class="iconfont icon-wode"></span>
+            我的
+        </router-link>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       selected: '/',
-      AppFooter: [],
-      navlist:[{name:'AV',class:'iconfont icon-shipin1',to:'/AV'},
-               {name:'视频',class:'iconfont icon-shipin',to:'/Video'},
-               {name:'分类',class:'iconfont icon-tag',to:'/Tag'},
-               {name:'收藏',class:'iconfont icon-shoucang',to:'/Collect'},
-               {name:'我的',class:'iconfont icon-wode',to:'/User'}]
+      bottomAdvertisingSectionList:[]
     }
   },
   watch: {
-    selected(newVal) {
+    selected (newVal) {
       this.$router.push(newVal)
     }
   },
-  created() {
-    this.getbottomAdvertisingSectionList()
+  created () {
+      this.getbottomAdvertisingSectionList()
   },
-  methods: {
+  methods:{
     //底部插入广告
-    getbottomAdvertisingSectionList() {
-      this.$http.get('/api/advert/list', {
-        cate_code: 'AppFooter'
-      }).then(res => {
+    getbottomAdvertisingSectionList(){
+      this.$http.get('/api/advert/list',{cate_code:'AppFooter'}).then(res => {
         if (res.status === 0) {
-          this.AppFooter = res.data
+          this.bottomAdvertisingSectionList = res.data
         }
       })
     },
+    linkAV(){
+      console.log('xxx')
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.Footer {
-    z-index: 100;
-    .AppFooter {
-        position: fixed;
-        bottom: 1rem;
-        width: 100%;
-        img {
-            height: 1rem;
-            width: 100%;
-        }
+.bottomAdvertisingSection{
+    position: fixed;
+    bottom: 1rem;
+    width: 100%;
+}
+.bottomAdvertisingSection img{
+    height: 1rem;
+    width: 100%;
+}
+.footer {
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 1rem;
+  background: #fff;
+  box-shadow: 0 -1px 1px #ccc;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  a {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    font-size: 0.2rem;
+    justify-content: center;
+    align-items: center;
+    span {
+        font-size: 0.5rem;
     }
-    .list {
-        display: flex;
-        display: -webkit-flex;
-        flex-wrap: nowrap;
-        width: 100%;
-        height: 1rem;
-        background: #fff;
-        box-shadow: 0 -1px 1px #ccc;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        a {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            font-size: 0.2rem;
-            justify-content: center;
-            align-items: center;
-            span {
-                font-size: 0.25rem;
-            }
-            &.active {
-                color: #FE7A94;
-            }
-            i{
-              font-size: 0.4rem;
-            }
-        }
+    &.active {
+      color: #FE7A94;
     }
-
+  }
 }
 </style>

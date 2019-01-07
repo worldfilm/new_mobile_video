@@ -1,6 +1,6 @@
 <template>
   <div class="my-profile" v-loading="loading">
-    <header-bar></header-bar>
+    <HeaderBar/>
     <el-form ref="form" label-width="1.6rem">
       <el-form-item label="性别">
         <el-radio v-model="sex" :label="1">男</el-radio>
@@ -22,10 +22,10 @@
 </template>
 
 <script>
-import headerBar from '@/components/layout/headerBar.vue'
+import HeaderBar from '@/components/HeaderBar.vue'
 export default {
   components: {
-    headerBar
+    HeaderBar
   },
   data () {
     return {
