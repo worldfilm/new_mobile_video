@@ -1,50 +1,41 @@
 <template>
-<div>
+<div class="Footer">
     <div class="bottomAdvertisingSection" v-for="(item, index) in bottomAdvertisingSectionList" :key="index">
         <a :href="item.url"  target="_blank" >
           <img :src="item.img_url"/>
         </a>
     </div>
     <div class="footer">
-        <router-link :to="{path:'AV', query: { active: true }}" @click='linkAV'>
-            <span class="iconfont icon-shipin1"></span>
-            AV
-        </router-link>
-        <router-link to='/Video'>
-            <span class="iconfont icon-shipin"></span>
-            视频
-        </router-link>
-        <router-link to='/tag'>
-            <span class="iconfont icon-tag"></span>
-            分类
-        </router-link>
-        <router-link to='/Collect'>
-            <span class="iconfont icon-shoucang"></span>
-            收藏
-        </router-link>
-        <router-link to='/user'>
-            <span class="iconfont icon-wode"></span>
-            我的
+        <router-link :to='item.link' v-for="(item,index) in list" :class="{isactive:index == num}">
+            <span :class=" item.class" ></span>
+            {{item.name}}
         </router-link>
     </div>
 </div>
 </template>
 
 <script>
+import Hub from '@/components/Hub.vue'
 export default {
   data () {
     return {
       selected: '/',
-      bottomAdvertisingSectionList:[]
-    }
-  },
-  watch: {
-    selected (newVal) {
-      this.$router.push(newVal)
+      bottomAdvertisingSectionList:[],
+      num:0,
+      list:[
+        {name:"AV",class:"iconfont icon-shipin1",link:"AV"},
+        {name:"视频",class:"iconfont icon-shipin",link:"Video"},
+        {name:"分类",class:"iconfont icon-tag",link:"Tag"},
+        {name:"收藏",class:"iconfont icon-shoucang",link:"Collect"},
+        {name:"我的",class:"iconfont icon-wode",link:"User"},
+        ]
     }
   },
   created () {
-      this.getbottomAdvertisingSectionList()
+    this.getbottomAdvertisingSectionList()
+    Hub.$on('sendingIdx', data => {
+      this.num=data
+    });
   },
   methods:{
     //底部插入广告
@@ -55,9 +46,6 @@ export default {
         }
       })
     },
-    linkAV(){
-      console.log('xxx')
-    }
   }
 }
 </script>
@@ -93,9 +81,9 @@ export default {
     span {
         font-size: 0.5rem;
     }
-    &.active {
-      color: #FE7A94;
-    }
+  }
+  .isactive {
+    color: #FE7A94;
   }
 }
 </style>

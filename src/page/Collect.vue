@@ -8,7 +8,6 @@
         </div>
       </div>
     </v-tab>
-    <Footer/>
   </div>
 </template>
 

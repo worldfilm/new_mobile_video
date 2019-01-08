@@ -5,7 +5,6 @@
           <VideoList :video-item="item" v-for="(item, index) in showRes" :key="item.id+index" />
         </div>
       </v-tab>
-      <Footer/>
   </div>
 </template>
 
