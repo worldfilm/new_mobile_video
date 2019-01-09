@@ -83,6 +83,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.swiper-container2{margin-top: 0.2rem;}
 .item {
   height: .7rem;
   line-height: .7rem;
