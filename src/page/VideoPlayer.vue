@@ -73,6 +73,11 @@
         </div>
       </div>
     </div>
+    <div class="bottomAdvertisingSection" v-for="(item, index) in ADFooterList" :key="index">
+        <a :href="item.url"  target="_blank" >
+          <img :src="item.img_url"/>
+        </a>
+    </div>
   </div>
 </template>
 

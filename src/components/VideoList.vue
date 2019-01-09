@@ -113,6 +113,10 @@ export default {
 //     position: relative;
 //     top: 0.1rem;
 // }
+.rowImg{
+  height: 2.5rem;
+  width: 100%;
+}
 .VideoList {
   margin-bottom: 0.2rem;
   display: inline;

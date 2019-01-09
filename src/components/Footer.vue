@@ -62,7 +62,7 @@ export default {
     width: 100%;
 }
 .bottomAdvertisingSection img{
-    height: 1rem;
+    height: 1.1rem;
     width: 100%;
 }
 .footer {
