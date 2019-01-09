@@ -11,7 +11,7 @@ var originUrl=window.location.origin;
 if(originUrl=="http://dist.6fg645fsd.com"||
     originUrl=='http://localhost:8080'||
     originUrl=='http://localhost:8081'||
-    originUrl=='http://192.168.1.107:8080'||
+    originUrl=='http://192.168.1.103:8080'||
     originUrl=='http://h5.me'
     ){
 

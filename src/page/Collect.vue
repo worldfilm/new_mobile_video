@@ -1,13 +1,13 @@
 <template>
   <div class="Collect">
-    <v-tab :tabs="tabs" @clickHandle="clickHandle">
+    <!-- <v-tab :tabs="tabs" @clickHandle="clickHandle">
       <div v-loading="loading" style="height: 100%;">
-        <div class="actors-container">
-          <actor-item v-if="tabId === '0'" :actor-info="item" v-for="(item, index) in actors" class="act-item" :key="index" @click="toDetail(item)"/>
+        <div class="actors-container"> -->
+          <!-- <actor-item v-if="tabId === '0'" :actor-info="item" v-for="(item, index) in actors" class="act-item" :key="index" @click="toDetail(item)"/> -->
           <VideoList v-if="['1','2'].indexOf(tabId) > -1"  :show-collect="false" :video-item="item" v-for="(item) in videos" :key="item.id"/>
-        </div>
+        <!-- </div>
       </div>
-    </v-tab>
+    </v-tab> -->
   </div>
 </template>
 

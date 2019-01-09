@@ -180,7 +180,7 @@ export default {
     .person-center {
         border-top: 1px solid #f1f1f1;
         margin-top: 0.3rem;
-        padding-bottom: 3rem;
+        padding-bottom: 0rem;
         li {
             padding: 0 0.2rem;
             border-bottom: 1px solid #f1f1f1;

@@ -1,7 +1,7 @@
 <template>
-  <div class="HeadeNav">
+  <div class="HeadeNav" v-if="ShowHeadeNav">
     <ul>
-      <li v-for="(item,index) in list" v-text="item.name" :id="item.id" :style="{width:widthData}" :class="{active:index==num}"></li>
+      <li @click="NavClick(item.id,index)" v-for="(item,index) in list" v-text="item.name" :id="item.id" :style="{width:widthData}" :class="{active:index==num}"></li>
     </ul>
   </div>
 </template>
@@ -12,16 +12,15 @@ export default {
   },
   data() {
     return {
+      ShowHeadeNav:true,
       num:0,
       widthData:0,
       list:[{id: 2, name: "黄金正片", thumb: "http://img.qxlsjw.com/appdev/fengmian/huangjinzhengpian.jpg"},
-            {id: 2, name: "黄金正片", thumb: "http://img.qxlsjw.com/appdev/fengmian/huangjinzhengpian.jpg"},
             {id: 3, name: "欧美专区", thumb: "http://img.qxlsjw.com/appdev/fengmian/oumei.jpg"},
             {id: 6, name: "日本无码", thumb: "http://img.qxlsjw.com/appdev/fengmian/boduoyejieyi.jpg"},
             {id: 13, name: "卡通动漫", thumb: "http://img.qxlsjw.com/appdev/fengmian/dongman.jpg"},
             {id: 16, name: "中文字幕", thumb: null}],
       list0:[{id: 2, name: "黄金正片", thumb: "http://img.qxlsjw.com/appdev/fengmian/huangjinzhengpian.jpg"},
-            {id: 2, name: "黄金正片", thumb: "http://img.qxlsjw.com/appdev/fengmian/huangjinzhengpian.jpg"},
             {id: 3, name: "欧美专区", thumb: "http://img.qxlsjw.com/appdev/fengmian/oumei.jpg"},
             {id: 6, name: "日本无码", thumb: "http://img.qxlsjw.com/appdev/fengmian/boduoyejieyi.jpg"},
             {id: 13, name: "卡通动漫", thumb: "http://img.qxlsjw.com/appdev/fengmian/dongman.jpg"},
@@ -32,16 +31,32 @@ export default {
       list2:[{name: '女优列表',id: 0},
             {name: 'AV分类',id: 1},
             {name: '视频分类',id: 2}],
+      list3:[{name: '女优',id: 0},
+            {name: 'AV',id: 1},
+            {name: '视频',id: 2}],
     }
   },
   methods: {
+    NavClick(id,index){
+      Hub.$emit('sendListId', id);
+      this.num=index
+    }
   },
   mounted(){
     Hub.$on('sendingIdx', data => {
       data==0?(this.list=this.list0):[]
       data==1?(this.list=this.list1):[]
       data==2?(this.list=this.list2):[]
+      data==3?(this.list=this.list3):[]
       this.widthData=100/this.list.length+"%"
+    });
+    Hub.$on('ShowHeadeNav', data => {
+       this.ShowHeadeNav=data
+       if(data==false){
+         Hub.$emit('marginData', 0);
+       }else {
+         Hub.$emit('marginData', '0.8rem');
+       }
     });
   },
   created() {

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/page/home.vue'
+import Home from '@/page/Home.vue'
 import AV from '@/page/AV.vue'
 import Video from '@/page/Video.vue'
 import Tag from '@/page/Tag.vue'

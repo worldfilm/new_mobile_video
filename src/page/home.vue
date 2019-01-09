@@ -1,11 +1,12 @@
 <template>
-  <div class="home" :style="{width:widthData+'px',height:heightData+'px'}">
+  <div class="home" >
     <HeadeNav/>
-      <div class="swiper-container">
+      <div class="swiper-container" :style="{'margin-top':marginData}">
         <div class="swiper-wrapper">
           <div class="swiper-slide"><AV/></div>
           <div class="swiper-slide"><Video/></div>
-          <!-- <div class="swiper-slide"><Tag/></div> -->
+          <div class="swiper-slide"><Tag/></div>
+          <!-- <div class="swiper-slide">'Tag'</div> -->
           <div class="swiper-slide"><Collect/></div>
           <div class="swiper-slide"><User/></div>
         </div>
@@ -30,11 +31,12 @@ export default {
   },
   data () {
     return {
-       ClientWidth:0,
-       ClientHeight:0,
        widthData:0,
        heightData:0,
        activeVal:0,
+       displayData:'',
+       ShowFooter:'',
+       marginData:'0.8rem',
     }
   },
   mounted(){
@@ -43,24 +45,37 @@ export default {
        })
       mySwiper.on('slideChangeTransitionEnd', function () {
        let activeIndex=mySwiper.activeIndex
+       // console.log(activeIndex)
+       if(activeIndex==4){
+         console.log(activeIndex)
+         Hub.$emit('ShowHeadeNav', false);
+         Hub.$emit('ShowFooter', false);
+       }else{
+         Hub.$emit('ShowHeadeNav', true);
+         Hub.$emit('ShowFooter', true);
+         // this.marginData='0.8rem'
+       }
        Hub.$emit('sendingIdx', activeIndex);
       });
+
     },
     created () {
-      let ClientWidth=document.documentElement.clientWidth //滚动条高度
-      let ClientHeight=document.documentElement.clientHeight//浏览器高度
-      this.ClientWidth=ClientWidth
-      this.ClientHeight=ClientHeight
       this.widthData=document.documentElement.clientWidth
       this.heightData=document.documentElement.clientHeight
+      this.ShowHeadeNav=true
+      this.ShowFooter=true
+      Hub.$on('marginData', data => {
+          this.marginData=data
+      });
     }
 }
 </script>
 <style lang="scss" scoped>
 .swiper-container {
   width: 100%;
-  height: 100%;
+  // height: 87%;
   z-index: 0;
+  margin-bottom: 1rem;
 }
 .swiper-slide {
   text-align: center;

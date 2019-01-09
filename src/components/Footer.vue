@@ -1,15 +1,17 @@
 <template>
-<div class="Footer">
+<div class="Footer" v-if="ShowFooter">
     <div class="bottomAdvertisingSection" v-for="(item, index) in bottomAdvertisingSectionList" :key="index">
         <a :href="item.url"  target="_blank" >
           <img :src="item.img_url"/>
         </a>
     </div>
     <div class="footer">
-        <router-link :to='item.link' v-for="(item,index) in list" :class="{isactive:index == num}">
-            <span :class=" item.class" ></span>
-            {{item.name}}
-        </router-link>
+      <ul>
+        <li v-for="(item,index) in list" :class="{isactive:index == num}">
+            <i :class="item.class"></i>
+            <span v-text="item.name"></span>
+        </li>
+      </ul>
     </div>
 </div>
 </template>
@@ -19,24 +21,18 @@ import Hub from '@/components/Hub.vue'
 export default {
   data () {
     return {
+      ShowFooter:true,
       selected: '/',
       bottomAdvertisingSectionList:[],
       num:0,
-      list:[
-        {name:"AV",class:"iconfont icon-shipin1",link:"AV"},
-        {name:"视频",class:"iconfont icon-shipin",link:"Video"},
-        {name:"分类",class:"iconfont icon-tag",link:"Tag"},
-        {name:"收藏",class:"iconfont icon-shoucang",link:"Collect"},
-        {name:"我的",class:"iconfont icon-wode",link:"User"},
-        ]
+      list:[{name:"AV",class:"iconfont icon-shipin1",link:"AV"},
+            {name:"视频",class:"iconfont icon-shipin",link:"Video"},
+            {name:"分类",class:"iconfont icon-tag",link:"Tag"},
+            {name:"收藏",class:"iconfont icon-shoucang",link:"Collect"},
+            {name:"我的",class:"iconfont icon-wode",link:"User"}],
     }
   },
-  created () {
-    this.getbottomAdvertisingSectionList()
-    Hub.$on('sendingIdx', data => {
-      this.num=data
-    });
-  },
+
   methods:{
     //底部插入广告
     getbottomAdvertisingSectionList(){
@@ -46,6 +42,15 @@ export default {
         }
       })
     },
+  },
+  created () {
+    this.getbottomAdvertisingSectionList()
+    Hub.$on('sendingIdx', data => {
+      this.num=data
+    });
+    Hub.$on('ShowFooter', data => {
+      this.ShowFooter=data
+    });
   }
 }
 </script>
@@ -71,19 +76,26 @@ export default {
   position: fixed;
   bottom: 0;
   left: 0;
-  a {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    font-size: 0.2rem;
-    justify-content: center;
-    align-items: center;
-    span {
-        font-size: 0.5rem;
+  ul{
+      width: 100%;
+    li{
+      display: inline-block;
+      width: 20%;
+      font-size: 0.25rem;
+      text-align: center;
+      i{
+        font-size: 0.45rem;
+        display: block;
+        height: 0.6rem;
+        line-height: 0.6rem;
+      }
+      span{
+        // font-size: 0.5rem;
+      }
     }
-  }
-  .isactive {
-    color: #FE7A94;
+    .isactive {
+      color: #FE7A94;
+    }
   }
 }
 </style>

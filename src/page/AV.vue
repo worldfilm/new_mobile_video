@@ -1,10 +1,10 @@
 <template>
-  <div class="AV">
-      <v-tab :isSubTab="true" @refresh="param.page++" :tabs="tabs" @clickHandle="clickHandle">
-        <div style="height: 100%" class="clearfix" @refresh="param.page++" v-loading="loading">
-          <VideoList :video-item="item" v-for="(item, index) in showRes" :key="item.id+index" />
-        </div>
-      </v-tab>
+  <div class="AV" :style="{width:widthData+'px'}">
+      <!-- <v-tab :isSubTab="true" @refresh="param.page++" :tabs="tabs" @clickHandle="clickHandle"> -->
+        <!-- <div style="height: 100%" class="clearfix" @refresh="param.page++" v-loading="loading"> -->
+          <VideoList :video-item="item" v-for="(item, index) in showRes"/>
+        <!-- </div> -->
+      <!-- </v-tab> -->
   </div>
 </template>
 
@@ -12,14 +12,15 @@
 import vTab from '@/components/tabs.vue'
 import VideoList from '@/components/VideoList.vue'
 import Footer from '@/components/Footer.vue'
-
+import Hub from '@/components/Hub.vue'
 export default {
   components: {
-    vTab,
-    VideoList,Footer
+    vTab,VideoList,Footer
   },
   data () {
     return {
+      widthData:'',
+      heightData:'',
       hotListData:[],
       WebVideoList:[],
       tabs: [],
@@ -28,7 +29,7 @@ export default {
         new: []
       },
       param: {
-        categoryid: null,
+        categoryid: 2,
         page: 1,
         page_size: 10
       },
@@ -79,7 +80,7 @@ export default {
               label: item.name
             }
           })
-          this.param.categoryid = this.tabs[0].id
+          this.param.categoryid = 9
         }
       })
     },
@@ -92,7 +93,12 @@ export default {
       })
     },
     // 获取视频列表
-    getVideosByCategory () {
+    getVideosByCategory (data) {
+      if(data!=undefined){
+        this.param.categoryid=data
+        console.log(data)
+      }
+
       let param = this.param
       this.$http.get('/mapi/category/categorydetail', param).then(res => {
         if (res.status === 0) {
@@ -123,16 +129,25 @@ export default {
           // debugger
           // 插入广告
           this.videos[this.resStr] = this.videos[this.resStr].concat(res.data[this.resStr])
-          this.$children[0].dropDown = false
-          this.$children[0].dropUp = false
-          this.loading = false
+          // this.$children[0].dropDown = false
+          // this.$children[0].dropUp = false
+          // this.loading = false
         }
       })
     }
   },
+  mounted(){
+
+  },
   created () {
     this.getCategory()
     this.Onlineadvertising()
+    this.widthData=document.documentElement.clientWidth
+    this.heightData=document.documentElement.clientHeight
+    Hub.$on('sendListId', data => {
+        this.getVideosByCategory (data)
+        // console.log(data)
+    });
   }
 }
 </script>

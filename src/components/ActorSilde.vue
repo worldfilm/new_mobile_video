@@ -1,6 +1,6 @@
 <template>
   <div class="actors">
-    <div class="swiper-container">
+    <div class="swiper-container2">
     <div class="swiper-wrapper">
       <div class="swiper-slide" >
         <button class="item"  style="width:2rem;">按字母查询</button>
@@ -20,8 +20,7 @@
 
 <script>
 import actorItem from '@/components/actorItem.vue'
-import Swiper from 'swiper';
-import 'swiper/dist/css/swiper.min.css';
+import Swiper2 from 'swiper';
 export default {
   components: {
     actorItem
@@ -69,13 +68,13 @@ export default {
     }
   },
   mounted(){
-       var mySwiper2 = new Swiper('.swiper-container', {
+       var mySwiper2 = new Swiper2('.swiper-container2', {
          scrollbar: '.swiper-scrollbar',
          direction: 'horizontal',
          slidesPerView: 'auto',
          freeMode: true
        })
-     },
+    },
   created () {
     this.getActors()
     this.getchartlist('A',0)
