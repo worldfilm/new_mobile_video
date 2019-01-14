@@ -1,118 +1,89 @@
 <template>
-  <div class="VideoList">
-    <div class="item" @click="toDetail(videoItem.id)" >
-      <div class="img">
-        <img v-lazy="videoItem.thumb_img_url" :key="videoItem.thumb_img_url">
-        <div class="time">
-          {{videoItem.created_at}}
-        </div>
-        <span class="iconfont icon-shoucang like" :class="{liked: collected}" @click="collect(videoItem.id)" v-if="showCollect"></span>
-      </div>
-      <p class="title">{{videoItem.title}}</p>
-      <!-- <div class="desc clearfix">
-        <div class="fl">{{item.views}}次观看</div>
-        <div class="fr">{{item.like}}人喜欢</div>
-      </div> -->
-    </div>
-    <!-- 插入广告 -->
-    <a v-if='ad' :href="totalList.url" target="view_window">
-      <div class="row1" >
-        <img class="rowImg" :src="totalList.img_url"/>
-        <!-- <span class="rowTitle">{{totalList.title}}</span> -->
-      </div>
-    </a>
-    <!-- 插入广告 -->
+  <div class="VideoList" >
+    <ul>
+      <li v-for="item in list" class="item" @click="toDetail(list.id)">
+          <div class="img">
+            <img v-lazy="list.thumb_img_url" :key="list.thumb_img_url">
+            <div class="time">
+              {{list.created_at}}
+            </div>
+            <span class="iconfont icon-shoucang like"  @click="collect(list.id)" ></span>
+          </div>
+          <p class="title">{{list.title}}</p>
+         <div class="desc clearfix">
+            <div class="fl">次观看</div>
+            <div class="fr">人喜欢</div>
+          </div>
+        <!-- 插入广告 -->
+        <a v-if='ad' :href="totalList.url" target="view_window">
+          <div class="row1" >
+            <img class="rowImg" :src="totalList.img_url"/>
+            <span class="rowTitle">{{totalList.title}}</span>
+          </div>
+        </a>
+        <!-- 插入广告 -->
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    videoItem: {
-      type: Object,
-      default () {
-        return {}
-      }
-    },
-    test:{
-      type: Object,
-    },
-    showCollect: {
-      type: Boolean,
-      default: true
-    },
-    isRow: {
-      type: Boolean,
-      default: true
-    }
-  },
   data () {
     return {
       isCollected: false,
       defaultImg:"this.src='/default1.jpg'",
       ad:false,
-      totalList:[]
-    }
-  },
-  computed: {
-    collected () {
-      return this.isCollected
+      param: {
+        categoryid: 2,
+        page: 1,
+        page_size: 40
+      },
+      list:[],
+      ADList:[],
     }
   },
   methods: {
-    add(){
-      let videoItem=this.videoItem
-      // console.log(videoItem.xxx)
-      for(var i in videoItem){
-        if(videoItem.xxx){
-          this.ad=true
-        }
-      }
-    },
-    //视频列表里插入广告
-    getWebVideoList(){
-      this.$http.get('/api/advert/list',{cate_code:'WebVideoList'}).then(res => {
+    // 获取视频列表
+    getVideoList(data) {
+      let param = this.param
+      this.$http.get('/mapi/category/categorydetail', param).then(res => {
         if (res.status === 0) {
-          this.WebVideoList = res.data
+          // this.list=res.data.new
+          let i=0,list=res.data.new
+          for(i in list){
+              if(i > 1 && i % 6 == 0){
+                  list[i-1].ad = true
+              }
+          }
+          this.list=list
         }
       })
     },
-    collect (id) {
-      if (!this.isCollected) {
-        this.$collect(id, res => {
-          if (res.status === 0) {
-            this.isCollected = !this.isCollected
-          }
-        })
-      } else {
-        this.$cancelCollect(id, res => {
-          if (res.status === 0) {
-            this.isCollected = !this.isCollected
-          }
-        })
-      }
+    // 视频列表Video插入广告
+    getAD(){
+      this.$http.get('/api/advert/list',{cate_code:'AppVideoListVideo'}).then(res => {
+        if (res.status === 0) {
+          this.ADList=res.data
+        }
+      })
     },
-    toDetail (id) {
-      this.$router.push({path: `/videoPlay/${id}`})
-    }
+  },
+  mounted(){
+
+    // console.log(this.ADList)
+    console.log(this.list)
   },
   created () {
-    this.add()
-    this.isCollected = this.videoItem.isCollects
+    this.getVideoList()
+    this.getAD()
     // debugger
-    this.totalList = JSON.parse(window.sessionStorage.getItem('hotListData'))
+    console.log(this.list)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-// .rowTitle{
-//     width: 100%;
-//     font-size: 0.3rem;
-//     font-weight: 600;
-//     position: relative;
-//     top: 0.1rem;
-// }
 .rowImg{
   height: 2.5rem;
   width: 100%;

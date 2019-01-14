@@ -1,6 +1,6 @@
 <template>
 <div class="person">
-  <div class="TopAdvertisingSection" v-for="(item, index) in AppUserTop" :key="index">
+  <div class="TopAd" v-for="(item, index) in AppUserTop" :key="index">
     <a :href="item.url" target="_blank">
           <img :src="item.img_url"/>
         </a>
@@ -134,6 +134,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.TopAd{
+  a{
+    img{
+      height: 1.1rem;
+      width: 100%;
+    }
+  }
+}
 .person {
     margin-top: -0.2rem;
     font-size: 0.2rem;

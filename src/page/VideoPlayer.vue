@@ -73,9 +73,9 @@
         </div>
       </div>
     </div>
-    <div class="bottomAdvertisingSection" v-for="(item, index) in ADFooterList" :key="index">
+    <div class="bottomAd" v-for="(item, index) in ADFooterList" :key="index">
         <a :href="item.url"  target="_blank" >
-          <img :src="item.img_url"/>
+          <img class="proImg" :src="item.img_url"/>
         </a>
     </div>
   </div>
@@ -96,6 +96,7 @@ export default {
       videoInfo: {},
       AppPlayTop:[],
       AppPlayCenter:[],
+      ADFooterList:[],
     }
   },
   computed: {
@@ -122,6 +123,14 @@ export default {
       this.$http.get('/api/advert/list',{cate_code:'AppPlayCenter'}).then(res => {
         if (res.status === 0) {
           this.AppPlayCenter = res.data
+        }
+      })
+    },
+    //底部插入广告
+    getADFooterList(){
+      this.$http.get('/api/advert/list',{cate_code:'AppFooter'}).then(res => {
+        if (res.status === 0) {
+          this.ADFooterList = res.data
         }
       })
     },
@@ -182,14 +191,20 @@ export default {
     this.getVideoInfo()
     this.getVideoComment()
     this.getAppPlayCenter()
+    this.getADFooterList()
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.bottomAd{
+    position: fixed;
+    bottom: 0rem;
+    width: 100%;
+}
 .proImg{
-  width: 100%;
-  height: 2.3rem;
+   height: 1.1rem;
+   width: 100%;
 }
 .isCollect {
   color: #FE7A94 !important;
@@ -224,6 +239,7 @@ export default {
   }
   .comment {
     margin-top: 0.2rem;
+    margin-bottom: 1rem;
     .comment-box {
       margin-bottom: 0.2rem;
     }

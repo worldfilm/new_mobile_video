@@ -2,7 +2,7 @@
   <div class="AV" :style="{width:widthData+'px'}">
       <!-- <v-tab :isSubTab="true" @refresh="param.page++" :tabs="tabs" @clickHandle="clickHandle"> -->
         <!-- <div style="height: 100%" class="clearfix" @refresh="param.page++" v-loading="loading"> -->
-          <VideoList :video-item="item" v-for="(item, index) in showRes"/>
+          <VideoList/>
         <!-- </div> -->
       <!-- </v-tab> -->
   </div>
@@ -20,56 +20,18 @@ export default {
   data () {
     return {
       widthData:'',
-      heightData:'',
-      hotListData:[],
-      WebVideoList:[],
-      tabs: [],
-      videos: {
-        hot: [],
-        new: []
-      },
       param: {
         categoryid: 2,
         page: 1,
-        page_size: 10
+        page_size: 40
       },
       resStr: 'new',
-      loading: false
-    }
-  },
-  computed: {
-    showRes () {
-      // debugger
-      return this.videos[this.resStr] || []
-    }
-  },
-  watch: {
-    'param.page' () {
-      this.getVideosByCategory()
-    },
-    'param.categoryid' () {
-      this.loading = true
-      this.resStr = 'new'
-      this.videos = {
-        hot: [],
-        new: []
-      }
-      this.getVideosByCategory()
-    },
-    resStr () {
-      this.videos = {
-        hot: [],
-        new: []
-      }
-      this.param.page === 1 ? this.getVideosByCategory() : this.param.page = 1
+      loading: false,
+      list:[],
+      ADList:[],
     }
   },
   methods: {
-    clickHandle (id, str) {
-      this.resStr = str
-      this.param.categoryid = id
-      this.param.page = 1
-    },
     // 获取分类
     getCategory () {
       this.$http.get('/mapi/category/getvediolist').then(res => {
@@ -84,70 +46,66 @@ export default {
         }
       })
     },
-    // 在线广告
-    Onlineadvertising(){
-      this.$http.get('/api/advert/list',{cate_code:'AppVideoList'}).then(res => {
-        if (res.status === 0) {
-          this.WebVideoList = res.data
-        }
-      })
-    },
-    // 获取视频列表
-    getVideosByCategory (data) {
-      if(data!=undefined){
-        this.param.categoryid=data
-        console.log(data)
-      }
 
+    // 获取视频列表
+    getVideoList(data) {
+      // if(data!=undefined){
+        this.param.categoryid=data
+        // console.log(this.param.categoryid)
+      // }
       let param = this.param
       this.$http.get('/mapi/category/categorydetail', param).then(res => {
         if (res.status === 0) {
-          // 插入广告
-          let hotlist=res.data.hot
-          let newlist=res.data.new
-          for(var i in hotlist){
-            if(i / 5 >= 1 && i % 5 == 0){
-              hotlist[i].xxx = this.WebVideoList[this.param.page -1]
-              this.hotListData = hotlist[i].xxx
-            }
+          this.list=res.data.new
+          let i=0,list=this.list
+          for(i in list){
+              if(i > 1 && i % 6 == 0){
+                // console.log(i-1)
+                  list[i-1].ad = true
+              }
           }
-          if(this.hotListData === undefined){
-            } else{
-              window.sessionStorage.setItem('hotListData', JSON.stringify(this.hotListData))
-          }
-          for(var i in newlist){
-            if(i / 5 >= 1 && i % 5 == 0){
-              newlist[i].xxx = this.WebVideoList[this.param.page -1]
-              this.hotListData = newlist[i].xxx
-            }
-          }
-          if(this.hotListData === undefined){
-            } else{
-              window.sessionStorage.setItem('hotListData', JSON.stringify(this.hotListData))
-          }
-          res.data={'new':newlist,'hot':hotlist}
-          // debugger
-          // 插入广告
-          this.videos[this.resStr] = this.videos[this.resStr].concat(res.data[this.resStr])
-          // this.$children[0].dropDown = false
-          // this.$children[0].dropUp = false
-          // this.loading = false
+          this.list=list
         }
       })
-    }
+    },
+    // 视频列表Video插入广告
+    getAD(){
+      this.$http.get('/api/advert/list',{cate_code:'AppVideoListVideo'}).then(res => {
+        if (res.status === 0) {
+          this.ADList=res.data
+        }
+      })
+    },
+    // 视频列表Video插入广告
+    // InsertAD(){
+    //   // console.log(this.ADList)
+    //   // console.log(this.list)
+    //   let i=0,list=this.list,ADList=this.ADList,j=0
+    //   for(i in list){
+    //       if(i > 1 && i % 6 == 0){
+    //         // console.log(i-1)
+    //           list[i-1].ad = true
+    //       }
+    //   }
+    //   this.list=list
+    // },
   },
-  mounted(){
+  beforeUpdate(){
 
+    // console.log(this.ADList)
+    // console.log(this.list)
   },
   created () {
-    this.getCategory()
-    this.Onlineadvertising()
+    this.getCategory()// 获取分类
+
     this.widthData=document.documentElement.clientWidth
     this.heightData=document.documentElement.clientHeight
     Hub.$on('sendListId', data => {
-        this.getVideosByCategory (data)
+        this.getVideoList(data)
         // console.log(data)
     });
+    this.getVideoList()// 获取视频列表
+    this.getAD()// 视频列表Video插入广告
   }
 }
 </script>

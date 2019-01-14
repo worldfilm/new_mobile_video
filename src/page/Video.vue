@@ -2,7 +2,7 @@
   <div class="Video">
     <!-- <v-tab :tabs="tabs" @clickHandle="clickHandle" @refresh="param.page++"> -->
       <!-- <div style="height: 100%" class="clearfix" v-loading="loading"> -->
-        <VideoList :video-item="item" v-for="(item, index) in showRes"/>
+        <!-- <VideoList :video-item="item" v-for="(item, index) in showRes"/> -->
       <!-- </div> -->
     <!-- </v-tab> -->
   </div>
