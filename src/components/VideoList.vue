@@ -3,24 +3,19 @@
     <ul>
       <li v-for="item in list" class="item" @click="toDetail(list.id)">
           <div class="img">
-            <img v-lazy="list.thumb_img_url" :key="list.thumb_img_url">
+            <img :src="list.thumb_img_url" :key="list.thumb_img_url">
             <div class="time">
               {{list.created_at}}
             </div>
             <span class="iconfont icon-shoucang like"  @click="collect(list.id)" ></span>
           </div>
           <p class="title">{{list.title}}</p>
-         <div class="desc clearfix">
-            <div class="fl">次观看</div>
-            <div class="fr">人喜欢</div>
-          </div>
         <!-- 插入广告 -->
-        <a v-if='ad' :href="totalList.url" target="view_window">
+        <!-- <a v-if='ad' :href="ADList.url" target="view_window">
           <div class="row1" >
-            <img class="rowImg" :src="totalList.img_url"/>
-            <span class="rowTitle">{{totalList.title}}</span>
+            <img class="rowImg" :src="ADList.img_url"/>
           </div>
-        </a>
+        </a> -->
         <!-- 插入广告 -->
       </li>
     </ul>
@@ -32,7 +27,7 @@ export default {
   data () {
     return {
       isCollected: false,
-      defaultImg:"this.src='/default1.jpg'",
+      // defaultImg:"this.src='/default1.jpg'",
       ad:false,
       param: {
         categoryid: 2,
@@ -51,12 +46,13 @@ export default {
         if (res.status === 0) {
           // this.list=res.data.new
           let i=0,list=res.data.new
-          for(i in list){
-              if(i > 1 && i % 6 == 0){
-                  list[i-1].ad = true
-              }
-          }
+          // for(i in list){
+          //     if(i > 1 && i % 6 == 0){
+          //         list[i-1].ad = true
+          //     }
+          // }
           this.list=list
+          console.log(list)
         }
       })
     },
@@ -68,17 +64,20 @@ export default {
         }
       })
     },
+    toDetail(id){
+      console.log(id)
+    },
+    collect(){},
   },
   mounted(){
 
     // console.log(this.ADList)
-    console.log(this.list)
+    // console.log(this.list)
   },
   created () {
     this.getVideoList()
     this.getAD()
     // debugger
-    console.log(this.list)
   }
 }
 </script>
@@ -95,6 +94,7 @@ export default {
     display: inline-block;
     width: 48.5%;
     margin: 0.04rem;
+    float: left;
     .img {
       position: relative;
       text-align: center;

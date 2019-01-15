@@ -56,8 +56,15 @@ export default {
          // this.marginData='0.8rem'
        }
        Hub.$emit('sendingIdx', activeIndex);
+       if(activeIndex==1){
+         console.log('11111111')
+         Hub.$emit('firstQuery', activeIndex);
+       }
+       if(activeIndex==0){
+         console.log('000000000')
+         Hub.$emit('secondQuery', activeIndex);
+       }
       });
-
     },
     created () {
       this.widthData=document.documentElement.clientWidth
