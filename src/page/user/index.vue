@@ -1,85 +1,89 @@
 <template>
-<div class="person">
-  <div class="TopAd" v-for="(item, index) in AppUserTop" :key="index">
-    <a :href="item.url" target="_blank">
-          <img :src="item.img_url"/>
-        </a>
+  <div class="person">
+    <div v-if="activeIndex==4">
+      <div class="TopAd" v-for="(item, index) in AppUserTop" :key="index">
+        <a :href="item.url" target="_blank">
+              <img :src="item.img_url"/>
+            </a>
+      </div>
+      <div class="avatar-box">
+        <template v-if="userInfo">
+                    <div class="avatar" @click="toPage">
+                        <!-- <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                            <img :src="userInfo.avatar" class="avatar">
+                        </el-upload> -->
+                        <img :src="userInfo.avatar" alt="">
+                    </div>
+                    <div class="username">
+                        {{userInfo.username}}
+                        <span class="vip-icon" v-if="userInfo.is_vip">(vip)</span>
+                    </div>
+                    <el-button type="primary" v-if="!userInfo.is_vip" @click="toVip" round>充值VIP</el-button>
+                    <a href="javascript:;" @click="logout" class="logout">退出</a>
+                </template>
+        <template v-else>
+                    <div class="nologin-tips">
+                        请先
+                        <el-button type="primary" round @click="$router.push('/login')">登录</el-button>
+                    </div>
+                </template>
+      </div>
+      <div class="person-center">
+        <ul>
+          <li>
+            <router-link to="/myVideos" class="clearfix">
+              <div class="fl">
+                <i class="iconfont icon-shipin"></i>我的视频
+              </div>
+              <div class="fr">
+                <i class="iconfont icon-jiantou"></i>
+              </div>
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/profile" class="clearfix">
+              <div class="fl">
+                <i class="iconfont icon-ziliao"></i>我的资料
+              </div>
+              <div class="fr">
+                <i class="iconfont icon-jiantou"></i>
+              </div>
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/collect" class="clearfix">
+              <div class="fl">
+                <i class="iconfont icon-shoucang"></i>我的收藏
+              </div>
+              <div class="fr">
+                <i class="iconfont icon-jiantou"></i>
+              </div>
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/userSafe" class="clearfix">
+              <div class="fl">
+                <i class="iconfont icon-wode"></i>账户安全
+              </div>
+              <div class="fr">
+                <i class="iconfont icon-jiantou"></i>
+              </div>
+            </router-link>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <div class="avatar-box">
-    <template v-if="userInfo">
-                <div class="avatar" @click="toPage">
-                    <!-- <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                        <img :src="userInfo.avatar" class="avatar">
-                    </el-upload> -->
-                    <img :src="userInfo.avatar" alt="">
-                </div>
-                <div class="username">
-                    {{userInfo.username}}
-                    <span class="vip-icon" v-if="userInfo.is_vip">(vip)</span>
-                </div>
-                <el-button type="primary" v-if="!userInfo.is_vip" @click="toVip" round>充值VIP</el-button>
-                <a href="javascript:;" @click="logout" class="logout">退出</a>
-            </template>
-    <template v-else>
-                <div class="nologin-tips">
-                    请先
-                    <el-button type="primary" round @click="$router.push('/login')">登录</el-button>
-                </div>
-            </template>
-  </div>
-  <div class="person-center">
-    <ul>
-      <li>
-        <router-link to="/myVideos" class="clearfix">
-          <div class="fl">
-            <i class="iconfont icon-shipin"></i>我的视频
-          </div>
-          <div class="fr">
-            <i class="iconfont icon-jiantou"></i>
-          </div>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/profile" class="clearfix">
-          <div class="fl">
-            <i class="iconfont icon-ziliao"></i>我的资料
-          </div>
-          <div class="fr">
-            <i class="iconfont icon-jiantou"></i>
-          </div>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/collect" class="clearfix">
-          <div class="fl">
-            <i class="iconfont icon-shoucang"></i>我的收藏
-          </div>
-          <div class="fr">
-            <i class="iconfont icon-jiantou"></i>
-          </div>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/userSafe" class="clearfix">
-          <div class="fl">
-            <i class="iconfont icon-wode"></i>账户安全
-          </div>
-          <div class="fr">
-            <i class="iconfont icon-jiantou"></i>
-          </div>
-        </router-link>
-      </li>
-    </ul>
-  </div>
-</div>
 </template>
 
 <script>
+import Hub from '@/components/Hub.vue'
 export default {
   data() {
     return {
       userInfo: null,
-      AppUserTop: []
+      AppUserTop: [],
+      activeIndex:'',
     }
   },
   methods: {
@@ -129,6 +133,9 @@ export default {
   created() {
     this.userInfo = this.$user.getUserInfo()
     this.getAppUserTop()
+    Hub.$on('activeIndex', data => {
+        this.activeIndex=data
+    });
   }
 }
 </script>

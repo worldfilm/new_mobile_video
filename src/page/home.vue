@@ -33,7 +33,7 @@ export default {
     return {
        widthData:0,
        heightData:0,
-       activeVal:0,
+       activeIndex:0,
        displayData:'',
        ShowFooter:'',
        marginData:'0.8rem',
@@ -46,26 +46,36 @@ export default {
       mySwiper.on('slideChangeTransitionEnd', function () {
        let activeIndex=mySwiper.activeIndex
        // console.log(activeIndex)
+       Hub.$emit('sendingIdx', activeIndex);
+       if(activeIndex==0){
+         Hub.$emit('secondQuery', 10);
+       }
+       if(activeIndex==1){
+         Hub.$emit('firstQuery', 2);
+       }
+       if(activeIndex==2){
+       }
+       if(activeIndex==3){
+       }
        if(activeIndex==4){
-         console.log(activeIndex)
          Hub.$emit('ShowHeadeNav', false);
          Hub.$emit('ShowFooter', false);
        }else{
          Hub.$emit('ShowHeadeNav', true);
          Hub.$emit('ShowFooter', true);
-         // this.marginData='0.8rem'
        }
-       Hub.$emit('sendingIdx', activeIndex);
-       if(activeIndex==1){
-         console.log('11111111')
-         Hub.$emit('firstQuery', activeIndex);
-       }
-       if(activeIndex==0){
-         console.log('000000000')
-         Hub.$emit('secondQuery', activeIndex);
-       }
+       this.activeIndex=activeIndex
+       Hub.$emit('activeIndex', activeIndex);
+       console.log(this.activeIndex)
       });
     },
+    // watch: {
+    //   activeIndex: function(curVal, oldVal) {
+    //     if (curVal) {
+    //        console.log(curVal)
+    //     }
+    //   }
+    // },
     created () {
       this.widthData=document.documentElement.clientWidth
       this.heightData=document.documentElement.clientHeight

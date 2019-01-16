@@ -1,5 +1,8 @@
 <template>
   <div class="Collect">
+    <div v-if="activeIndex==3">
+
+    </div>
     <!-- <v-tab :tabs="tabs" @clickHandle="clickHandle">
       <div v-loading="loading" style="height: 100%;">
         <div class="actors-container"> -->
@@ -16,6 +19,7 @@ import vTab from '@/components/tabs.vue'
 import VideoList from '@/components/VideoList.vue'
 import actorItem from '@/components/actorItem.vue'
 import Footer from '@/components/Footer.vue'
+import Hub from '@/components/Hub.vue'
 const tabs = [
   {
     label: '女优',
@@ -48,7 +52,8 @@ export default {
         video_category: 1
       },
       actors: [],
-      videos: []
+      videos: [],
+      activeIndex:'',
     }
   },
   created(){
@@ -97,14 +102,20 @@ export default {
         }
       })
     }
-  }
+  },
+  created () {
+    Hub.$on('activeIndex', data => {
+        this.activeIndex=data
+    });
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .Collect{
-  // width: 8rem;
-// height: 20rem;
+  width: 8rem;
+min-height: 20rem;
+
 }
 .actors-container {
   margin-top: 0.2rem;

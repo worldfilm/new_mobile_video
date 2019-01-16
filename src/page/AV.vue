@@ -1,6 +1,6 @@
 <template>
   <div class="AV" :style="{width:widthData+'px'}">
-    <div class="VideoList" >
+    <div class="VideoList" v-if="activeIndex==0">
       <ul>
         <li v-for="item in list" class="item" @click="toDetail(list.id)">
             <div class="img">
@@ -21,12 +21,12 @@
     </div>
   </div>
 </template>
-
 <script>
 import vTab from '@/components/tabs.vue'
 import VideoList from '@/components/VideoList.vue'
 import Footer from '@/components/Footer.vue'
 import Hub from '@/components/Hub.vue'
+
 export default {
   components: {
     vTab,VideoList,Footer
@@ -47,6 +47,7 @@ export default {
       ADList:[],
       ad:false,
       num:0,
+      activeIndex:'',
     }
   },
   methods: {
@@ -65,24 +66,41 @@ export default {
       })
     },
     // 获取视频列表
-    getVideoList(data) {
-      this.param.categoryid=data
-
-      if(this.param.categoryid!=undefined){this.param.page_size=10;this.list=[];this.num=0}
-      let param = this.param
-      this.num=this.num+1
-      this.$http.get('/mapi/category/categorydetail', param).then(res => {
-        if (res.status === 0) {
-          this.list=res.data.new
-          let i=0,list=this.list
-          for(i in list){
-              if(i > 1 && i % 6 == 0){
-                  list[i-1].ad = this.ADList
-              }
+    getVideoList(data,num) {
+      // let id=this.param.categoryid
+      // console.log('id='+id)
+      // if(data==undefined){
+      //   this.param.categoryid=2
+      //   console.log('undefinedcategoryid2='+this.param.categoryid)
+      // }else{
+      //   this.param.categoryid=data
+      //   this.param.page_size=6
+      //   console.log('categoryid6='+this.param.categoryid)
+      // }
+      if(this.param.categoryid!=undefined&&this.activeIndex==0){
+        this.list=[];
+        let num=this.num
+        num=num+1
+        this.num=num
+        let categoryid=this.param.categoryid
+        let page_size=this.param.page_size
+        let page=this.param.page
+        this.num=this.num+1
+        page_size=this.num/2*6
+        // console.log('AV请求categoryid='+categoryid)
+        this.$http.get('/mapi/category/categorydetail?categoryid='+categoryid+'&page='+page+'&page_size='+page_size).then(res => {
+          if (res.status === 0) {
+            this.list=res.data.new
+            let i=0,list=this.list
+            for(i in list){
+                if(i > 1 && i % 6 == 0){
+                    list[i-1].ad = this.ADList
+                }
+            }
+            this.list=list
           }
-          this.list=list
-        }
-      })
+        })
+      }
     },
     // 视频列表Video插入广告
     getAD(){
@@ -92,30 +110,17 @@ export default {
         }
       })
     },
-    handleScroll(){
-        // 页面滚动距顶部距离
+    handleScroll(){  // 页面滚动距顶部距离
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop ||document.body.scrollTop
         var scroll = scrollTop - this.i;
         this.i = scrollTop;
         let ScrollChange=document.documentElement.scrollTop //滚动条高度
-        // console.log('滚动条高度='+ScrollChange)
         let ClientHeight=document.documentElement.clientHeight//浏览器高度
-        // console.log('浏览器高度='+ClientHeight)
         let OffsetHeight=document.documentElement.offsetHeight
-        // console.log('网页高度='+OffsetHeight)
         let numchange=OffsetHeight-ClientHeight
-          let num=this.num
         if(ScrollChange==numchange){
-
-          num=num+1
-          this.num=num
-          // console.log('滚动条高度='+ScrollChange)
-          // console.log('浏览器高度='+ClientHeight)
-          // console.log('网页高度='+OffsetHeight)
-          // alert('滚动条高度='+ScrollChange+'浏览器高度='+ClientHeight+'网页高度='+OffsetHeight)
-          this.param.page_size=10*this.num
-            this.getVideoList()
-            console.log('请求='+num)
+          let categoryid=this.param.categoryid
+            this.getVideoList(categoryid)
         }
     },
   },
@@ -128,12 +133,20 @@ export default {
     this.heightData=document.documentElement.clientHeight
     this.ScrollChange=document.documentElement.scrollTop
     Hub.$on('sendListId', data => {
+        this.param.categoryid=data
+        this.param.page_size=6
         this.getVideoList(data)
     });
     Hub.$on('firstQuery', data => {
         this.getVideoList(data)
     });
-    this.getVideoList()// 获取视频列表
+    Hub.$on('activeIndex', data => {
+        this.activeIndex=data
+        if(data==0){
+          this.this.param.page_size=6
+        }
+    });
+    this.getVideoList(2)// 获取视频列表
     this.getAD()// 视频列表Video插入广告
   },
 }
