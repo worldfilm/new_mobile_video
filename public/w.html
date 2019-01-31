@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <!-- <link rel="shortcut icon" href=favicon.ico type=image/x-icon> -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+  <style media="screen">
+  body {background:#fff;z-index:1;}
+  * {margin: 0;padding: 0;font-family: 微软雅黑;}
+  a {text-decoration: none;}
+  input {outline: none}
+  li {list-style: none;}
+  #app{background-size: 100%;z-index:10;}
+  .pay{height: 18rem;width: 100%;text-align: center;position: relative;}
+  .pay img{width: 4rem;height: 4rem;padding:1rem 2rem;margin: 0 auto;}
+  .pay p{height: 1rem;font-size:0.4rem;margin: 0 auto;line-height: 1rem;font-weight: bold;}
+  .btn{padding: 1rem 0;}
+  .btn a{padding:0.3rem 0.6rem;border-radius: 0.15rem;color: #3a2f2f;background: #fff;outline: none;display: inline-block;border: 0.03rem solid #808080;}
+  .red{color:#f11717;}
+  </style>
+  <title></title>
+  <script>
+      !function(N,M){function L(){var a=I.getBoundingClientRect().width;a/F>1024&&(a=1024*F);var d=a/10;I.style.fontSize=d+"px",D.rem=N.rem=d}var K,J=N.document,I=J.documentElement,H=J.querySelector('meta[name="viewport"]'),G=J.querySelector('meta[name="flexible"]'),F=0,E=0,D=M.flexible||(M.flexible={});if(H){/*console.warn("将根据已有的meta标签来设置缩放比例");*/var C=H.getAttribute("content").match(/initial\-scale=([\d\.]+)/);C&&(E=parseFloat(C[1]),F=parseInt(1/E))}else{if(G){var B=G.getAttribute("content");if(B){var A=B.match(/initial\-dpr=([\d\.]+)/),z=B.match(/maximum\-dpr=([\d\.]+)/);A&&(F=parseFloat(A[1]),E=parseFloat((1/F).toFixed(2))),z&&(F=parseFloat(z[1]),E=parseFloat((1/F).toFixed(2)))}}}if(!F&&!E){var y=N.navigator.userAgent,x=(!!y.match(/android/gi),!!y.match(/iphone/gi)),w=x&&!!y.match(/OS 9_3/),v=N.devicePixelRatio;F=x&&!w?v>=3&&(!F||F>=3)?3:v>=2&&(!F||F>=2)?2:1:1,E=1/F}if(I.setAttribute("data-dpr",F),!H){if(H=J.createElement("meta"),H.setAttribute("name","viewport"),H.setAttribute("content","initial-scale="+E+", maximum-scale="+E+", minimum-scale="+E+", user-scalable=no"),I.firstElementChild){I.firstElementChild.appendChild(H)}else{var u=J.createElement("div");u.appendChild(H),J.write(u.innerHTML)}}N.addEventListener("resize",function(){clearTimeout(K),K=setTimeout(L,300)},!1),N.addEventListener("pageshow",function(b){b.persisted&&(clearTimeout(K),K=setTimeout(L,300))},!1),"complete"===J.readyState?J.body.style.fontSize=12*F+"px":J.addEventListener("DOMContentLoaded",function(){J.body.style.fontSize=12*F+"px"},!1),L(),D.dpr=N.dpr=F,D.refreshRem=L,D.rem2px=function(d){var c=parseFloat(d)*this.rem;return"string"==typeof d&&d.match(/rem$/)&&(c+="px"),c},D.px2rem=function(d){var c=parseFloat(d)/this.rem;return"string"==typeof d&&d.match(/px$/)&&(c+="rem"),c}}(window,window.lib||(window.lib={}));
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js" charset="utf-8"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+  <div id=app  :style="'height:'+ num+'px'">
+    <div class="pay">
+      <p><span>请<span class="red">务必</span>支付：</span><span>99.99</span><span>元</span></p>
+      <p><span>否则可能无法自动到帐</span></p>
+      <img src="http://img.qstuanwei.com/gift/1547864921qr.png" alt="" class="QRcode">
+
+      <p><span>常按二维码保存图片或截屏后，用微信扫码支付</span></p>
+    </div>
+  </div>
+</body>
+</html>
+<script  charset="utf-8">
+var vm=new Vue({
+  data() {
+    return {
+      num:'800',
+    }
+  },
+  el: '#app',
+  components: {},
+  methods: {
+     saveImg(){
+
+     }
+ },
+ mounted(){
+
+ },
+ updated() {
+
+  },
+  created() {
+    let clientHeight=document.documentElement.clientHeight//浏览器高度
+    this.num=clientHeight
+ },
+})
+</script>

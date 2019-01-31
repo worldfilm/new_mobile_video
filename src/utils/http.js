@@ -17,6 +17,7 @@ if(originUrl=="http://dist.6fg645fsd.com"||
 
    config = {
     baseURL: 'https://webvideo.6fg645fsd.com',
+    // baseURL: 'http://video-api.psxgtj.com',
     timeout: 30000
   }
 }

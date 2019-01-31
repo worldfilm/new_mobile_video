@@ -1,6 +1,6 @@
 <template>
-  <div class="AV" :style="{width:widthData+'px'}">
-    <div class="VideoList" v-if="activeIndex==0">
+  <div class="AV" :style="{width:widthData+'px'}"  @touchend='touchEnd'>
+     <div class="VideoList" v-if="activeIndex==0">
       <ul>
         <li v-for="item in list" class="item" @click="toDetail(list.id)">
             <div class="img">
@@ -12,45 +12,69 @@
             </div>
             <p class="title">{{item.title}}</p>
           <!-- 插入广告 -->
-          <a class="adlink" v-if="item.ad"  :href="item.ad.url" target="view_window">
+           <a class="adlink" v-if="item.ad"  :href="item.ad.url" target="view_window">
               <img class="adimg" :src="item.ad.img_url"/>
           </a>
           <!-- 插入广告 -->
-        </li>
+         </li>
       </ul>
     </div>
   </div>
 </template>
 <script>
-import vTab from '@/components/tabs.vue'
+import tabs from '@/components/tabs.vue'
 import VideoList from '@/components/VideoList.vue'
 import Footer from '@/components/Footer.vue'
 import Hub from '@/components/Hub.vue'
-
+  import Scroll from '@/components/scroll.vue'
 export default {
   components: {
-    vTab,VideoList,Footer
+    tabs,VideoList,Footer,Scroll
   },
   data () {
     return {
       widthData:'',
       heightData:'',
       ScrollChange:'',
-      param: {
-        categoryid: 2,
-        page: 1,
-        page_size: 10
-      },
       resStr: 'new',
       loading: false,
       list:[],
       ADList:[],
       ad:false,
-      num:0,
-      activeIndex:'',
+      num:8,
+      activeIndex:0,
+      page_size:8,
+      categoryid:2,
+      page: 1,
+      items: [],
+      startY: 0,
     }
   },
   methods: {
+    touchEnd (e) {
+      let scrollIsToTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop // safari 获取scrollTop用window.pageYOffset
+      let OffsetHeight=document.documentElement.offsetHeight
+      let clientHeight=document.documentElement.clientHeight//浏览器高度
+      let numberN=scrollIsToTop+clientHeight+56
+      if(numberN==OffsetHeight){
+        let num=this.num+8
+        this.num=num
+        this.getVideoList(this.categoryid,this.num)
+      }
+    },
+    clickItem() {
+      this.$router.back()
+    },
+    // 视频列表Video插入广告
+    getAD(){
+      this.$http.get('/api/advert/list',{cate_code:'AppVideoListAV'}).then(res => {
+        if (res.status === 0) {
+          if(res.data.length>0){
+            this.ADList=res.data[0]
+          }
+        }
+      })
+    },
     // 获取分类
     getCategory () {
       this.$http.get('/mapi/category/getvediolist').then(res => {
@@ -61,33 +85,18 @@ export default {
               label: item.name
             }
           })
-          this.param.categoryid = 9
+          // this.categoryid = 9
         }
       })
     },
     // 获取视频列表
-    getVideoList(data,num) {
-      // let id=this.param.categoryid
-      // console.log('id='+id)
-      // if(data==undefined){
-      //   this.param.categoryid=2
-      //   console.log('undefinedcategoryid2='+this.param.categoryid)
-      // }else{
-      //   this.param.categoryid=data
-      //   this.param.page_size=6
-      //   console.log('categoryid6='+this.param.categoryid)
-      // }
-      if(this.param.categoryid!=undefined&&this.activeIndex==0){
-        this.list=[];
-        let num=this.num
-        num=num+1
-        this.num=num
-        let categoryid=this.param.categoryid
-        let page_size=this.param.page_size
-        let page=this.param.page
-        this.num=this.num+1
-        page_size=this.num/2*6
-        // console.log('AV请求categoryid='+categoryid)
+    getVideoList(categoryid,num) {
+      console.log(' num='+num)
+      if(this.categoryid!=undefined&&this.activeIndex==0){
+        this.page_size=num
+        let page=this.page
+        let page_size=this.page_size
+        // page_size=(num+1)*page_size
         this.$http.get('/mapi/category/categorydetail?categoryid='+categoryid+'&page='+page+'&page_size='+page_size).then(res => {
           if (res.status === 0) {
             this.list=res.data.new
@@ -98,56 +107,52 @@ export default {
                 }
             }
             this.list=list
+            // console.log(this.list)
           }
         })
       }
     },
-    // 视频列表Video插入广告
-    getAD(){
-      this.$http.get('/api/advert/list',{cate_code:'AppVideoListVideo'}).then(res => {
-        if (res.status === 0) {
-          this.ADList=res.data[0]
-        }
-      })
-    },
+
     handleScroll(){  // 页面滚动距顶部距离
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop ||document.body.scrollTop
-        var scroll = scrollTop - this.i;
-        this.i = scrollTop;
-        let ScrollChange=document.documentElement.scrollTop //滚动条高度
-        let ClientHeight=document.documentElement.clientHeight//浏览器高度
-        let OffsetHeight=document.documentElement.offsetHeight
-        let numchange=OffsetHeight-ClientHeight
-        if(ScrollChange==numchange){
-          let categoryid=this.param.categoryid
-            this.getVideoList(categoryid)
-        }
+      // let scrollIsToTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop // safari 获取scrollTop用window.pageYOffset
+      // let OffsetHeight=document.documentElement.offsetHeight
+      // let clientHeight=document.documentElement.clientHeight//浏览器高度
+      // let numberN=scrollIsToTop+clientHeight
+      // // console.log('numberN='+numberN+'  OffsetHeight='+OffsetHeight)
+      // if(numberN==OffsetHeight){
+      //   // console.log('numberN='+numberN+'  OffsetHeight='+OffsetHeight)
+      //   let num=this.num+8
+      //   this.num=num
+      //   let categoryid=this.categoryid
+      //   this.getVideoList(categoryid,this.num)
+      // }
     },
   },
   mounted(){
-    window.addEventListener('scroll', this.handleScroll, true);
+    let categoryid=2,num=8
+    this.getVideoList(categoryid,num)// 获取视频列表
+    Hub.$on('AVsendId', categoryid => {
+        this.getVideoList(categoryid,num)
+    });
+  },
+  updated(){
+    // window.addEventListener('scroll', this.handleScroll, true);
   },
   created () {
+    this.getAD()// 视频列表Video插入广告
     this.getCategory()// 获取分类
+    let categoryid=this.categoryid,num=this.num
     this.widthData=document.documentElement.clientWidth
     this.heightData=document.documentElement.clientHeight
     this.ScrollChange=document.documentElement.scrollTop
     Hub.$on('sendListId', data => {
-        this.param.categoryid=data
-        this.param.page_size=6
-        this.getVideoList(data)
+      console.log('sendListId='+data)
+        this.categoryid=data
+        this.num=8
+        num=this.num
+        this.list=[]
+        this.getVideoList(this.categoryid,num)
     });
-    Hub.$on('firstQuery', data => {
-        this.getVideoList(data)
-    });
-    Hub.$on('activeIndex', data => {
-        this.activeIndex=data
-        if(data==0){
-          this.this.param.page_size=6
-        }
-    });
-    this.getVideoList(2)// 获取视频列表
-    this.getAD()// 视频列表Video插入广告
   },
 }
 </script>

@@ -5,10 +5,9 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide"><AV/></div>
           <div class="swiper-slide"><Video/></div>
-          <div class="swiper-slide"><Tag/></div>
-          <!-- <div class="swiper-slide">'Tag'</div> -->
-          <div class="swiper-slide"><Collect/></div>
-          <div class="swiper-slide"><User/></div>
+          <div class="swiper-slide">Tag</div>
+          <div class="swiper-slide">Collect</div>
+          <div class="swiper-slide">User</div>
         </div>
       </div>
       <Footer/>
@@ -45,37 +44,28 @@ export default {
        })
       mySwiper.on('slideChangeTransitionEnd', function () {
        let activeIndex=mySwiper.activeIndex
-       // console.log(activeIndex)
+       Hub.$emit('activeIndex', activeIndex);
        Hub.$emit('sendingIdx', activeIndex);
        if(activeIndex==0){
-         Hub.$emit('secondQuery', 10);
+         Hub.$emit('AVsendId', 2);
        }
        if(activeIndex==1){
-         Hub.$emit('firstQuery', 2);
+         Hub.$emit('VideoSendId', 10);
        }
        if(activeIndex==2){
        }
        if(activeIndex==3){
        }
        if(activeIndex==4){
+         //判断如果是个人中心,显示隐藏头部脚部
          Hub.$emit('ShowHeadeNav', false);
          Hub.$emit('ShowFooter', false);
        }else{
          Hub.$emit('ShowHeadeNav', true);
          Hub.$emit('ShowFooter', true);
        }
-       this.activeIndex=activeIndex
-       Hub.$emit('activeIndex', activeIndex);
-       console.log(this.activeIndex)
       });
     },
-    // watch: {
-    //   activeIndex: function(curVal, oldVal) {
-    //     if (curVal) {
-    //        console.log(curVal)
-    //     }
-    //   }
-    // },
     created () {
       this.widthData=document.documentElement.clientWidth
       this.heightData=document.documentElement.clientHeight
@@ -90,7 +80,6 @@ export default {
 <style lang="scss" scoped>
 .swiper-container {
   width: 100%;
-  // height: 87%;
   z-index: 0;
   margin-bottom: 1rem;
 }
